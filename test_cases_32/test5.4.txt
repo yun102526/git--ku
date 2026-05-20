@@ -7,7 +7,7 @@ int main(void)
 {
     int i;
     int n;
-    read(n);
+    n = read();
     a[0] = 0;
     a[1] = 1;
 

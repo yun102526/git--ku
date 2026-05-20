@@ -1,0 +1,198 @@
+--- 成功加载外部源文件: 测试用例/3.2/test_32_comprehensive2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test_32_comprehensive2.txt
+默认输入: [5]
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	1
+factor	700	1
+(	201	1
+int	102	1
+m	700	1
+)	202	1
+;	303	1
+int	102	2
+main	700	2
+(	201	2
+void	107	2
+)	202	2
+{	301	2
+int	102	3
+n	700	3
+,	304	3
+result	700	3
+;	303	3
+n	700	4
+=	219	4
+read	112	4
+(	201	4
+)	202	4
+;	303	4
+if	103	5
+(	201	5
+n	700	5
+<=	221	5
+0	400	5
+)	202	5
+{	301	5
+result	700	6
+=	219	6
+0	400	6
+;	303	6
+}	302	7
+else	104	7
+{	301	7
+if	103	8
+(	201	8
+n	700	8
+>	220	8
+8	400	8
+)	202	8
+{	301	8
+result	700	9
+=	219	9
+-	212	9
+1	400	9
+;	303	9
+}	302	10
+else	104	10
+{	301	10
+result	700	11
+=	219	11
+factor	700	11
+(	201	11
+n	700	11
+)	202	11
+;	303	11
+}	302	12
+}	302	13
+write	700	14
+(	201	14
+result	700	14
+)	202	14
+;	303	14
+return	106	15
+result	700	15
+;	303	15
+}	302	16
+int	102	17
+factor	700	17
+(	201	17
+int	102	17
+m	700	17
+)	202	17
+{	301	17
+int	102	18
+fa	700	18
+;	303	18
+if	103	19
+(	201	19
+m	700	19
+<=	221	19
+1	400	19
+)	202	19
+{	301	19
+fa	700	20
+=	219	20
+1	400	20
+;	303	20
+}	302	21
+else	104	21
+{	301	21
+fa	700	22
+=	219	22
+m	700	22
+*	213	22
+factor	700	22
+(	201	22
+m	700	22
+-	212	22
+1	400	22
+)	202	22
+;	303	22
+}	302	23
+return	106	24
+fa	700	24
+;	303	24
+}	302	25
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int factor)[1]
+    Param(int m)[1]
+  FunctionDef(int main)[2]
+    Compound
+      VarDecl(int n)[3]
+      VarDecl(int result)[3]
+      ExprStmt
+        AssignExpr[4]
+          Identifier(n)[4]
+          CallExpr(read)[4]
+      IfStmt
+        BinaryExpr(<=)[5]
+          Identifier(n)[5]
+          Literal(0)[5]
+        Compound
+          ExprStmt
+            AssignExpr[6]
+              Identifier(result)[6]
+              Literal(0)[6]
+      ElseStmt
+        Compound
+          IfStmt
+            BinaryExpr(>)[8]
+              Identifier(n)[8]
+              Literal(8)[8]
+            Compound
+              ExprStmt
+                AssignExpr[9]
+                  Identifier(result)[9]
+                  UnaryExpr(-)[9]
+                    Literal(1)[9]
+          ElseStmt
+            Compound
+              ExprStmt
+                AssignExpr[11]
+                  Identifier(result)[11]
+                  CallExpr(factor)[11]
+                    Identifier(n)[11]
+      ExprStmt
+        CallExpr(write)[14]
+          Identifier(result)[14]
+      ReturnStmt
+        Identifier(result)[15]
+  FunctionDef(int factor)[17]
+    Param(int m)[17]
+    Compound
+      VarDecl(int fa)[18]
+      IfStmt
+        BinaryExpr(<=)[19]
+          Identifier(m)[19]
+          Literal(1)[19]
+        Compound
+          ExprStmt
+            AssignExpr[20]
+              Identifier(fa)[20]
+              Literal(1)[20]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[22]
+              Identifier(fa)[22]
+              BinaryExpr(*)[22]
+                Identifier(m)[22]
+                CallExpr(factor)[22]
+                  BinaryExpr(-)[22]
+                    Identifier(m)[22]
+                    Literal(1)[22]
+      ReturnStmt
+        Identifier(fa)[24]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+factor: (factor, function, int, params=['m'])
+main: (main, function, int, params=[])
+n: (n, var, int)
+result: (result, var, int)
+m: (m, param, int)
+fa: (fa, var, int)

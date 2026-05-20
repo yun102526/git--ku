@@ -1,0 +1,115 @@
+--- 成功加载: 测试用例/4.2/test_42_comprehensive2.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test_42_comprehensive2.txt
+
+--- [输入] 四元式流 ---
+// 功能: 输入n, 若n<=0返回0, 若n>8返回-1, 否则计算n!
+//       调用factor递归函数计算阶乘
+// 输入: n=5, 范围0~8
+//       factor(5)=5*factor(4)=5*24=120
+// 输出: 120
+0: (read, _, _, t1)
+1: (=, t1, _, n)
+2: (J>, n, 0, 5)
+3: (=, 0, _, result)
+4: (J, _, _, 12)
+5: (J<=, n, 8, 9)
+6: (-, 0, 1, t2)
+7: (=, t2, _, result)
+8: (J, _, _, 12)
+9: (param, n, _, _)
+10: (call, factor, 1, t3)
+11: (=, t3, _, result)
+12: (write, result, _, _)
+13: (return, result, _, _)
+14: (J>, m, 1, 17)
+15: (=, 1, _, fa)
+16: (J, _, _, 22)
+17: (-, m, 1, t4)
+18: (param, t4, _, _)
+19: (call, factor, 1, t5)
+20: (*, m, t5, t6)
+21: (=, t6, _, fa)
+22: (return, fa, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %factor_ptr = alloca i32
+  %n_ptr = alloca i32
+  %result_ptr = alloca i32
+  br label %block0
+
+block0:
+  %t1 = add i32 0, 0
+  store i32 %t1, ptr %n_ptr
+  %rt0 = load i32, ptr %n_ptr
+  %brc_2 = icmp sgt i32 %rt0, 0
+  br i1 %brc_2, label %block2, label %block1
+
+block1:
+  store i32 0, ptr %result_ptr
+  br label %block5
+
+block2:
+  %rt1 = load i32, ptr %n_ptr
+  %brc_5 = icmp sle i32 %rt1, 8
+  br i1 %brc_5, label %block4, label %block3
+
+block3:
+  %t2 = sub i32 0, 1
+  store i32 %t2, ptr %result_ptr
+  br label %block5
+
+block4:
+  %rt2 = load i32, ptr %n_ptr
+  %t3 = call i32 @factor(i32 %rt2)
+  store i32 %t3, ptr %result_ptr
+  br label %block5
+
+block5:
+  %rt3 = load i32, ptr %result_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt3)
+  %rt4 = load i32, ptr %result_ptr
+  ret i32 %rt4
+
+}
+
+define i32 @factor(i32 %m) {
+entry:
+  %fa_ptr = alloca i32
+  %factor_ptr = alloca i32
+  %m_ptr = alloca i32
+  store i32 %m, ptr %m_ptr
+  br label %block0
+
+block0:
+  %rt0 = load i32, ptr %m_ptr
+  %brc_0 = icmp sgt i32 %rt0, 1
+  br i1 %brc_0, label %block2, label %block1
+
+block1:
+  store i32 1, ptr %fa_ptr
+  br label %block3
+
+block2:
+  %rt1 = load i32, ptr %m_ptr
+  %t4 = sub i32 %rt1, 1
+  %t5 = call i32 @factor(i32 %t4)
+  %rt2 = load i32, ptr %m_ptr
+  %t6 = mul i32 %rt2, %t5
+  store i32 %t6, ptr %fa_ptr
+  br label %block3
+
+block3:
+  %rt3 = load i32, ptr %fa_ptr
+  ret i32 %rt3
+
+}
+

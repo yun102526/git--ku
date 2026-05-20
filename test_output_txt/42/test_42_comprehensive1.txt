@@ -1,0 +1,241 @@
+--- 成功加载: 测试用例/4.2/test_42_comprehensive1.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test_42_comprehensive1.txt
+
+--- [输入] 四元式流 ---
+// 功能: 读取5个数到数组, 遍历数组累加正数(遇0退出,遇负数跳过)
+//       然后do-while加n次1, 最后根据条件调用addAdjust函数
+// 输入: n=5, 然后5个数组元素: 10, 3, 2, 1, 5
+//       先while读5个数: 10, 3, 2, 1, 5
+//       然后for遍历: 10+3+2+1+5=21 (都为正数)
+//       do-while加5次: sum=21+5=26 (但n变成0)
+//       然后sum>10 && flag==1 → true → 调用addAdjust(26,2)
+//       addAdjust: r=28, r>20 → r=25
+// 输出: 25
+0: (read, _, _, t1)
+1: (=, t1, _, n)
+2: (=, 0, _, i)
+3: (=, 0, _, sum)
+4: (=, 1, _, flag)
+5: (J>=, i, 5, 11)
+6: (read, _, _, t2)
+7: ([]=, t2, i, arr)
+8: (+, i, 1, t3)
+9: (=, t3, _, i)
+10: (J, _, _, 5)
+11: (=, 0, _, i)
+12: (J>=, i, 5, 25)
+13: (=[], arr, i, t4)
+14: (J>=, t4, 0, 16)
+15: (J, _, _, 22)
+16: (=[], arr, i, t5)
+17: (J!=, t5, 0, 19)
+18: (J, _, _, 25)
+19: (=[], arr, i, t6)
+20: (+, sum, t6, t7)
+21: (=, t7, _, sum)
+22: (+, i, 1, t8)
+23: (=, t8, _, i)
+24: (J, _, _, 12)
+25: (+, sum, 1, t9)
+26: (=, t9, _, sum)
+27: (-, n, 1, t10)
+28: (=, t10, _, n)
+29: (J>, n, 0, 25)
+30: (>, sum, 10, t11)
+31: (==, flag, 1, t12)
+32: (&&, t11, t12, t13)
+33: (==, n, 0, t14)
+34: (||, t13, t14, t15)
+35: (J==, t15, 0, 41)
+36: (param, sum, _, _)
+37: (param, 2, _, _)
+38: (call, addAdjust, 2, t16)
+39: (=, t16, _, result)
+40: (J, _, _, 45)
+41: (/, sum, 2, t17)
+42: (%, sum, 2, t18)
+43: (+, t17, t18, t19)
+44: (=, t19, _, result)
+45: (write, result, _, _)
+46: (return, result, _, _)
+47: (+, x, y, t20)
+48: (=, t20, _, r)
+49: (J<=, r, 20, 53)
+50: (-, r, 3, t21)
+51: (=, t21, _, r)
+52: (J, _, _, 55)
+53: (+, r, 3, t22)
+54: (=, t22, _, r)
+55: (return, r, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %addAdjust_ptr = alloca i32
+  %arr_ptr = alloca [100 x i32]
+  %flag_ptr = alloca i32
+  %i_ptr = alloca i32
+  %n_ptr = alloca i32
+  %result_ptr = alloca i32
+  %sum_ptr = alloca i32
+  br label %block0
+
+block0:
+  %t1 = add i32 0, 0
+  store i32 %t1, ptr %n_ptr
+  store i32 0, ptr %i_ptr
+  store i32 0, ptr %sum_ptr
+  store i32 1, ptr %flag_ptr
+  br label %block1
+
+block1:
+  %rt0 = load i32, ptr %i_ptr
+  %brc_5 = icmp sge i32 %rt0, 5
+  br i1 %brc_5, label %block3, label %block2
+
+block2:
+  %t2 = add i32 0, 0
+  %rt1 = load i32, ptr %i_ptr
+  %gp_7 = getelementptr [100 x i32], ptr %arr_ptr, i32 0, i32 %rt1
+  store i32 %t2, ptr %gp_7
+  %rt2 = load i32, ptr %i_ptr
+  %t3 = add i32 %rt2, 1
+  store i32 %t3, ptr %i_ptr
+  br label %block1
+
+block3:
+  store i32 0, ptr %i_ptr
+  br label %block4
+
+block4:
+  %rt3 = load i32, ptr %i_ptr
+  %brc_12 = icmp sge i32 %rt3, 5
+  br i1 %brc_12, label %block11, label %block5
+
+block5:
+  %rt4 = load i32, ptr %i_ptr
+  %gp_t4 = getelementptr [100 x i32], ptr %arr_ptr, i32 0, i32 %rt4
+  %t4 = load i32, ptr %gp_t4
+  %brc_14 = icmp sge i32 %t4, 0
+  br i1 %brc_14, label %block7, label %block10
+
+block7:
+  %rt5 = load i32, ptr %i_ptr
+  %gp_t5 = getelementptr [100 x i32], ptr %arr_ptr, i32 0, i32 %rt5
+  %t5 = load i32, ptr %gp_t5
+  %brc_17 = icmp ne i32 %t5, 0
+  br i1 %brc_17, label %block9, label %block11
+
+block9:
+  %rt6 = load i32, ptr %i_ptr
+  %gp_t6 = getelementptr [100 x i32], ptr %arr_ptr, i32 0, i32 %rt6
+  %t6 = load i32, ptr %gp_t6
+  %rt7 = load i32, ptr %sum_ptr
+  %t7 = add i32 %rt7, %t6
+  store i32 %t7, ptr %sum_ptr
+  br label %block10
+
+block10:
+  %rt8 = load i32, ptr %i_ptr
+  %t8 = add i32 %rt8, 1
+  store i32 %t8, ptr %i_ptr
+  br label %block4
+
+block11:
+  %rt9 = load i32, ptr %sum_ptr
+  %t9 = add i32 %rt9, 1
+  store i32 %t9, ptr %sum_ptr
+  %rt10 = load i32, ptr %n_ptr
+  %t10 = sub i32 %rt10, 1
+  store i32 %t10, ptr %n_ptr
+  %rt11 = load i32, ptr %n_ptr
+  %brc_29 = icmp sgt i32 %rt11, 0
+  br i1 %brc_29, label %block11, label %block12
+
+block12:
+  %rt12 = load i32, ptr %sum_ptr
+  %t11_i1 = icmp sgt i32 %rt12, 10
+  %t11 = zext i1 %t11_i1 to i32
+  %rt13 = load i32, ptr %flag_ptr
+  %t12_i1 = icmp eq i32 %rt13, 1
+  %t12 = zext i1 %t12_i1 to i32
+  %t13_c1 = icmp ne i32 %t11, 0
+  %t13_c2 = icmp ne i32 %t12, 0
+  %t13_b = and i1 %t13_c1, %t13_c2
+  %t13 = zext i1 %t13_b to i32
+  %rt14 = load i32, ptr %n_ptr
+  %t14_i1 = icmp eq i32 %rt14, 0
+  %t14 = zext i1 %t14_i1 to i32
+  %t15_c1 = icmp ne i32 %t13, 0
+  %t15_c2 = icmp ne i32 %t14, 0
+  %t15_b = or i1 %t15_c1, %t15_c2
+  %t15 = zext i1 %t15_b to i32
+  %brc_35 = icmp eq i32 %t15, 0
+  br i1 %brc_35, label %block14, label %block13
+
+block13:
+  %rt15 = load i32, ptr %sum_ptr
+  %t16 = call i32 @addAdjust(i32 %rt15, i32 2)
+  store i32 %t16, ptr %result_ptr
+  br label %block15
+
+block14:
+  %rt16 = load i32, ptr %sum_ptr
+  %t17 = sdiv i32 %rt16, 2
+  %rt17 = load i32, ptr %sum_ptr
+  %t18 = srem i32 %rt17, 2
+  %t19 = add i32 %t17, %t18
+  store i32 %t19, ptr %result_ptr
+  br label %block15
+
+block15:
+  %rt18 = load i32, ptr %result_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt18)
+  %rt19 = load i32, ptr %result_ptr
+  ret i32 %rt19
+
+}
+
+define i32 @addAdjust(i32 %x, i32 %y) {
+entry:
+  %r_ptr = alloca i32
+  %x_ptr = alloca i32
+  %y_ptr = alloca i32
+  store i32 %x, ptr %x_ptr
+  store i32 %y, ptr %y_ptr
+  br label %block0
+
+block0:
+  %rt0 = load i32, ptr %x_ptr
+  %rt1 = load i32, ptr %y_ptr
+  %t20 = add i32 %rt0, %rt1
+  store i32 %t20, ptr %r_ptr
+  %rt2 = load i32, ptr %r_ptr
+  %brc_2 = icmp sle i32 %rt2, 20
+  br i1 %brc_2, label %block2, label %block1
+
+block1:
+  %rt3 = load i32, ptr %r_ptr
+  %t21 = sub i32 %rt3, 3
+  store i32 %t21, ptr %r_ptr
+  br label %block3
+
+block2:
+  %rt4 = load i32, ptr %r_ptr
+  %t22 = add i32 %rt4, 3
+  store i32 %t22, ptr %r_ptr
+  br label %block3
+
+block3:
+  %rt5 = load i32, ptr %r_ptr
+  ret i32 %rt5
+
+}
+

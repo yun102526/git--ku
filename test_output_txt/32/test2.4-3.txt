@@ -1,0 +1,176 @@
+--- 成功加载外部源文件: 测试用例/3.2/test2.4-3.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test2.4-3.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	4
+chengfabiao	700	4
+(	201	4
+int	102	4
+n	700	4
+)	202	4
+{	301	5
+int	102	6
+i	700	6
+,	304	6
+j	700	6
+,	304	6
+s	700	6
+;	303	6
+for	108	7
+(	201	7
+i	700	7
+=	219	7
+1	400	7
+;	303	7
+i	700	7
+<=	221	7
+n	700	7
+;	303	7
+i	700	7
+=	219	7
+i	700	7
++	211	7
+1	400	7
+)	202	7
+{	301	8
+for	108	9
+(	201	9
+j	700	9
+=	219	9
+1	400	9
+;	303	9
+j	700	9
+<=	221	9
+i	700	9
+;	303	9
+j	700	9
+=	219	9
+j	700	9
++	211	9
+1	400	9
+)	202	9
+{	301	10
+s	700	11
+=	219	11
+i	700	11
+*	213	11
+j	700	11
+;	303	11
+write	700	12
+(	201	12
+j	700	12
+)	202	12
+;	303	12
+write	700	12
+(	201	12
+i	700	12
+)	202	12
+;	303	12
+write	700	12
+(	201	12
+s	700	12
+)	202	12
+;	303	12
+}	302	13
+}	302	14
+return	106	15
+0	400	15
+;	303	15
+}	302	16
+main	700	21
+(	201	21
+)	202	21
+{	301	22
+int	102	23
+n	700	23
+;	303	23
+n	700	24
+=	219	24
+read	112	24
+(	201	24
+)	202	24
+;	303	24
+chengfabiao	700	25
+(	201	25
+n	700	25
+)	202	25
+;	303	25
+}	302	26
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDef(int chengfabiao)[4]
+    Param(int n)[4]
+    Compound
+      VarDecl(int i)[6]
+      VarDecl(int j)[6]
+      VarDecl(int s)[6]
+      ForStmt
+        Init
+          AssignExpr[7]
+            Identifier(i)[7]
+            Literal(1)[7]
+        Condition
+          BinaryExpr(<=)[7]
+            Identifier(i)[7]
+            Identifier(n)[7]
+        Step
+          AssignExpr[7]
+            Identifier(i)[7]
+            BinaryExpr(+)[7]
+              Identifier(i)[7]
+              Literal(1)[7]
+        Compound
+          ForStmt
+            Init
+              AssignExpr[9]
+                Identifier(j)[9]
+                Literal(1)[9]
+            Condition
+              BinaryExpr(<=)[9]
+                Identifier(j)[9]
+                Identifier(i)[9]
+            Step
+              AssignExpr[9]
+                Identifier(j)[9]
+                BinaryExpr(+)[9]
+                  Identifier(j)[9]
+                  Literal(1)[9]
+            Compound
+              ExprStmt
+                AssignExpr[11]
+                  Identifier(s)[11]
+                  BinaryExpr(*)[11]
+                    Identifier(i)[11]
+                    Identifier(j)[11]
+              ExprStmt
+                CallExpr(write)[12]
+                  Identifier(j)[12]
+              ExprStmt
+                CallExpr(write)[12]
+                  Identifier(i)[12]
+              ExprStmt
+                CallExpr(write)[12]
+                  Identifier(s)[12]
+      ReturnStmt
+        Literal(0)[15]
+  FunctionDef(int main)[21]
+    Compound
+      VarDecl(int n)[23]
+      ExprStmt
+        AssignExpr[24]
+          Identifier(n)[24]
+          CallExpr(read)[24]
+      ExprStmt
+        CallExpr(chengfabiao)[25]
+          Identifier(n)[25]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+n: (n, var, int)
+chengfabiao: (chengfabiao, function, int, params=['n'])
+i: (i, var, int)
+j: (j, var, int)
+s: (s, var, int)
+main: (main, function, int, params=[])

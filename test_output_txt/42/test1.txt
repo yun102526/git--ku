@@ -1,0 +1,44 @@
+--- 成功加载: 测试用例/4.2/test1.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test1.txt
+
+--- [输入] 四元式流 ---
+// 计算 a=10, b=20, c=b*2+a = 20*2+10 = 50
+// 测试四元式: 赋值(=), 乘法(*), 加法(+), 写(write), 返回(return)
+0: (=, 10, _, a)
+1: (=, 20, _, b)
+2: (*, b, 2, t1)
+3: (+, a, t1, t2)
+4: (=, t2, _, c)
+5: (write, c, _, _)
+6: (return, c, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  %b_ptr = alloca i32
+  %c_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 10, ptr %a_ptr
+  store i32 20, ptr %b_ptr
+  %rt0 = load i32, ptr %b_ptr
+  %t1 = mul i32 %rt0, 2
+  %rt1 = load i32, ptr %a_ptr
+  %t2 = add i32 %rt1, %t1
+  store i32 %t2, ptr %c_ptr
+  %rt2 = load i32, ptr %c_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt2)
+  %rt3 = load i32, ptr %c_ptr
+  ret i32 %rt3
+
+}
+

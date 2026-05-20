@@ -1,0 +1,59 @@
+--- 成功加载: 测试用例/4.2/test4.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test4.txt
+
+--- [输入] 四元式流 ---
+// i从1到10, sum累加i, 结果=1+2+...+10=55
+// 测试四元式: for循环等价于 初始化+条件跳转+循环体+增量+回跳
+0: (=, 0, _, sum)
+1: (=, 1, _, i)
+2: (J>=, i, 11, 8)
+3: (+, sum, i, t1)
+4: (=, t1, _, sum)
+5: (+, i, 1, t2)
+6: (=, t2, _, i)
+7: (J, _, _, 2)
+8: (write, sum, _, _)
+9: (return, sum, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %i_ptr = alloca i32
+  %sum_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 0, ptr %sum_ptr
+  store i32 1, ptr %i_ptr
+  br label %block1
+
+block1:
+  %rt0 = load i32, ptr %i_ptr
+  %brc_2 = icmp sge i32 %rt0, 11
+  br i1 %brc_2, label %block3, label %block2
+
+block2:
+  %rt1 = load i32, ptr %sum_ptr
+  %rt2 = load i32, ptr %i_ptr
+  %t1 = add i32 %rt1, %rt2
+  store i32 %t1, ptr %sum_ptr
+  %rt3 = load i32, ptr %i_ptr
+  %t2 = add i32 %rt3, 1
+  store i32 %t2, ptr %i_ptr
+  br label %block1
+
+block3:
+  %rt4 = load i32, ptr %sum_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt4)
+  %rt5 = load i32, ptr %sum_ptr
+  ret i32 %rt5
+
+}
+

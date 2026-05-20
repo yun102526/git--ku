@@ -1,0 +1,371 @@
+--- 成功加载外部源文件: 测试用例/3.2/test5.5.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test5.5.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+main	700	5
+(	201	5
+)	202	5
+{	301	6
+int	102	7
+a	700	7
+[	305	7
+5	400	7
+]	306	7
+;	303	7
+int	102	8
+b	700	8
+=	219	8
+5	400	8
+;	303	8
+int	102	9
+i	700	9
+=	219	9
+0	400	9
+;	303	9
+int	102	10
+j	700	10
+=	219	10
+0	400	10
+;	303	10
+int	102	11
+temp	700	11
+;	303	11
+int	102	12
+k	700	12
+;	303	12
+while	105	13
+(	201	13
+i	700	13
+<	216	13
+b	700	13
+)	202	13
+{	301	14
+a	700	15
+[	305	15
+i	700	15
+]	306	15
+=	219	15
+read	112	15
+(	201	15
+)	202	15
+;	303	15
+i	700	16
+=	219	16
+i	700	16
++	211	16
+1	400	16
+;	303	16
+}	302	17
+for	108	18
+(	201	18
+i	700	18
+=	219	18
+0	400	18
+;	303	18
+i	700	18
+<	216	18
+5	400	18
+;	303	18
+i	700	18
+++	225	18
+)	202	18
+{	301	18
+write	700	19
+(	201	19
+a	700	19
+[	305	19
+i	700	19
+]	306	19
+)	202	19
+;	303	19
+write	700	20
+(	201	20
+' '	500	20
+)	202	20
+;	303	20
+}	302	21
+write	700	22
+(	201	22
+'\n'	500	22
+)	202	22
+;	303	22
+for	108	23
+(	201	23
+i	700	23
+=	219	23
+3	400	23
+;	303	23
+i	700	23
+>=	222	23
+0	400	23
+;	303	23
+i	700	23
+=	219	23
+i	700	23
+-	212	23
+1	400	23
+)	202	23
+{	301	24
+for	108	25
+(	201	25
+j	700	25
+=	219	25
+0	400	25
+;	303	25
+j	700	25
+<=	221	25
+i	700	25
+;	303	25
+j	700	25
+=	219	25
+j	700	25
++	211	25
+1	400	25
+)	202	25
+{	301	26
+b	700	27
+=	219	27
+j	700	27
++	211	27
+1	400	27
+;	303	27
+if	103	28
+(	201	28
+a	700	28
+[	305	28
+j	700	28
+]	306	28
+>	220	28
+a	700	28
+[	305	28
+b	700	28
+]	306	28
+)	202	28
+{	301	29
+temp	700	30
+=	219	30
+a	700	30
+[	305	30
+j	700	30
+]	306	30
+;	303	30
+a	700	31
+[	305	31
+j	700	31
+]	306	31
+=	219	31
+a	700	31
+[	305	31
+b	700	31
+]	306	31
+;	303	31
+a	700	32
+[	305	32
+b	700	32
+]	306	32
+=	219	32
+temp	700	32
+;	303	32
+}	302	33
+}	302	34
+for	108	35
+(	201	35
+k	700	35
+=	219	35
+0	400	35
+;	303	35
+k	700	35
+<	216	35
+5	400	35
+;	303	35
+k	700	35
+=	219	35
+k	700	35
++	211	35
+1	400	35
+)	202	35
+{	301	35
+write	700	36
+(	201	36
+a	700	36
+[	305	36
+k	700	36
+]	306	36
+)	202	36
+;	303	36
+write	700	37
+(	201	37
+' '	500	37
+)	202	37
+;	303	37
+}	302	38
+write	700	39
+(	201	39
+'\n'	500	39
+)	202	39
+;	303	39
+}	302	40
+}	302	41
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDef(int main)[5]
+    Compound
+      VarDecl(int a[5])[7]
+      VarDecl(int b)[8]
+        Init
+          Literal(5)[8]
+      VarDecl(int i)[9]
+        Init
+          Literal(0)[9]
+      VarDecl(int j)[10]
+        Init
+          Literal(0)[10]
+      VarDecl(int temp)[11]
+      VarDecl(int k)[12]
+      WhileStmt
+        BinaryExpr(<)[13]
+          Identifier(i)[13]
+          Identifier(b)[13]
+        Compound
+          ExprStmt
+            AssignExpr[15]
+              ArrayAccess[15]
+                Identifier(a)[15]
+                Identifier(i)[15]
+              CallExpr(read)[15]
+          ExprStmt
+            AssignExpr[16]
+              Identifier(i)[16]
+              BinaryExpr(+)[16]
+                Identifier(i)[16]
+                Literal(1)[16]
+      ForStmt
+        Init
+          AssignExpr[18]
+            Identifier(i)[18]
+            Literal(0)[18]
+        Condition
+          BinaryExpr(<)[18]
+            Identifier(i)[18]
+            Literal(5)[18]
+        Step
+          PostExpr(++)[18]
+            Identifier(i)[18]
+        Compound
+          ExprStmt
+            CallExpr(write)[19]
+              ArrayAccess[19]
+                Identifier(a)[19]
+                Identifier(i)[19]
+          ExprStmt
+            CallExpr(write)[20]
+              Literal(' ')[20]
+      ExprStmt
+        CallExpr(write)[22]
+          Literal('\n')[22]
+      ForStmt
+        Init
+          AssignExpr[23]
+            Identifier(i)[23]
+            Literal(3)[23]
+        Condition
+          BinaryExpr(>=)[23]
+            Identifier(i)[23]
+            Literal(0)[23]
+        Step
+          AssignExpr[23]
+            Identifier(i)[23]
+            BinaryExpr(-)[23]
+              Identifier(i)[23]
+              Literal(1)[23]
+        Compound
+          ForStmt
+            Init
+              AssignExpr[25]
+                Identifier(j)[25]
+                Literal(0)[25]
+            Condition
+              BinaryExpr(<=)[25]
+                Identifier(j)[25]
+                Identifier(i)[25]
+            Step
+              AssignExpr[25]
+                Identifier(j)[25]
+                BinaryExpr(+)[25]
+                  Identifier(j)[25]
+                  Literal(1)[25]
+            Compound
+              ExprStmt
+                AssignExpr[27]
+                  Identifier(b)[27]
+                  BinaryExpr(+)[27]
+                    Identifier(j)[27]
+                    Literal(1)[27]
+              IfStmt
+                BinaryExpr(>)[28]
+                  ArrayAccess[28]
+                    Identifier(a)[28]
+                    Identifier(j)[28]
+                  ArrayAccess[28]
+                    Identifier(a)[28]
+                    Identifier(b)[28]
+                Compound
+                  ExprStmt
+                    AssignExpr[30]
+                      Identifier(temp)[30]
+                      ArrayAccess[30]
+                        Identifier(a)[30]
+                        Identifier(j)[30]
+                  ExprStmt
+                    AssignExpr[31]
+                      ArrayAccess[31]
+                        Identifier(a)[31]
+                        Identifier(j)[31]
+                      ArrayAccess[31]
+                        Identifier(a)[31]
+                        Identifier(b)[31]
+                  ExprStmt
+                    AssignExpr[32]
+                      ArrayAccess[32]
+                        Identifier(a)[32]
+                        Identifier(b)[32]
+                      Identifier(temp)[32]
+          ForStmt
+            Init
+              AssignExpr[35]
+                Identifier(k)[35]
+                Literal(0)[35]
+            Condition
+              BinaryExpr(<)[35]
+                Identifier(k)[35]
+                Literal(5)[35]
+            Step
+              AssignExpr[35]
+                Identifier(k)[35]
+                BinaryExpr(+)[35]
+                  Identifier(k)[35]
+                  Literal(1)[35]
+            Compound
+              ExprStmt
+                CallExpr(write)[36]
+                  ArrayAccess[36]
+                    Identifier(a)[36]
+                    Identifier(k)[36]
+              ExprStmt
+                CallExpr(write)[37]
+                  Literal(' ')[37]
+          ExprStmt
+            CallExpr(write)[39]
+              Literal('\n')[39]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+main: (main, function, int, params=[])
+a: (a, array, int, size=5)
+b: (b, var, int)
+i: (i, var, int)
+j: (j, var, int)
+temp: (temp, var, int)
+k: (k, var, int)

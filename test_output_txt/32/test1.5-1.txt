@@ -1,0 +1,95 @@
+--- 成功加载外部源文件: 测试用例/3.2/test1.5-1.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test1.5-1.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+main	700	3
+(	201	3
+)	202	3
+{	301	3
+int	102	4
+x	700	4
+;	303	4
+int	102	5
+sum	700	5
+=	219	5
+0	400	5
+;	303	5
+for	108	6
+(	201	6
+x	700	6
+=	219	6
+1	400	6
+;	303	6
+x	700	6
+<=	221	6
+10	400	6
+;	303	6
+x	700	6
+=	219	6
+x	700	6
++	211	6
+1	400	6
+)	202	6
+{	301	6
+sum	700	7
+=	219	7
+sum	700	7
++	211	7
+x	700	7
+;	303	7
+}	302	8
+write	700	9
+(	201	9
+x	700	9
+)	202	9
+;	303	9
+write	700	10
+(	201	10
+sum	700	10
+)	202	10
+;	303	10
+}	302	11
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDef(int main)[3]
+    Compound
+      VarDecl(int x)[4]
+      VarDecl(int sum)[5]
+        Init
+          Literal(0)[5]
+      ForStmt
+        Init
+          AssignExpr[6]
+            Identifier(x)[6]
+            Literal(1)[6]
+        Condition
+          BinaryExpr(<=)[6]
+            Identifier(x)[6]
+            Literal(10)[6]
+        Step
+          AssignExpr[6]
+            Identifier(x)[6]
+            BinaryExpr(+)[6]
+              Identifier(x)[6]
+              Literal(1)[6]
+        Compound
+          ExprStmt
+            AssignExpr[7]
+              Identifier(sum)[7]
+              BinaryExpr(+)[7]
+                Identifier(sum)[7]
+                Identifier(x)[7]
+      ExprStmt
+        CallExpr(write)[9]
+          Identifier(x)[9]
+      ExprStmt
+        CallExpr(write)[10]
+          Identifier(sum)[10]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+main: (main, function, int, params=[])
+x: (x, var, int)
+sum: (sum, var, int)

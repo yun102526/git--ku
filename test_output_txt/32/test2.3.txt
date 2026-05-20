@@ -1,0 +1,121 @@
+--- 成功加载外部源文件: 测试用例/3.2/test2.3.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test2.3.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	4
+a	700	4
+=	219	4
+1	400	4
+;	303	4
+main	700	6
+(	201	6
+)	202	6
+{	301	6
+int	102	8
+i	700	8
+=	219	8
+1	400	8
+,	304	8
+sum	700	8
+=	219	8
+0	400	8
+,	304	8
+N	700	8
+;	303	8
+N	700	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
+;	303	9
+while	105	11
+(	201	11
+i	700	11
+<	216	11
+N	700	11
+)	202	11
+{	301	11
+if	103	12
+(	201	12
+i	700	12
+%	215	12
+2	400	12
+==	223	12
+0	400	12
+)	202	12
+{	301	12
+sum	700	13
+=	219	13
+sum	700	13
++	211	13
+i	700	13
+;	303	13
+}	302	14
+i	700	15
+=	219	15
+i	700	15
++	211	15
+1	400	15
+;	303	15
+}	302	16
+write	700	17
+(	201	17
+sum	700	17
+)	202	17
+;	303	17
+}	302	18
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  VarDecl(int a)[4]
+    Init
+      Literal(1)[4]
+  FunctionDef(int main)[6]
+    Compound
+      VarDecl(int i)[8]
+        Init
+          Literal(1)[8]
+      VarDecl(int sum)[8]
+        Init
+          Literal(0)[8]
+      VarDecl(int N)[8]
+      ExprStmt
+        AssignExpr[9]
+          Identifier(N)[9]
+          CallExpr(read)[9]
+      WhileStmt
+        BinaryExpr(<)[11]
+          Identifier(i)[11]
+          Identifier(N)[11]
+        Compound
+          IfStmt
+            BinaryExpr(==)[12]
+              BinaryExpr(%)[12]
+                Identifier(i)[12]
+                Literal(2)[12]
+              Literal(0)[12]
+            Compound
+              ExprStmt
+                AssignExpr[13]
+                  Identifier(sum)[13]
+                  BinaryExpr(+)[13]
+                    Identifier(sum)[13]
+                    Identifier(i)[13]
+          ExprStmt
+            AssignExpr[15]
+              Identifier(i)[15]
+              BinaryExpr(+)[15]
+                Identifier(i)[15]
+                Literal(1)[15]
+      ExprStmt
+        CallExpr(write)[17]
+          Identifier(sum)[17]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+a: (a, var, int)
+main: (main, function, int, params=[])
+i: (i, var, int)
+sum: (sum, var, int)
+N: (N, var, int)

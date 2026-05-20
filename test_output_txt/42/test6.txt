@@ -1,0 +1,81 @@
+--- 成功加载: 测试用例/4.2/test6.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test6.txt
+
+--- [输入] 四元式流 ---
+// 测试逻辑与(&&)和逻辑或(||)
+// r1=1&&0=0, r2=1||0=1, r3=(1&&1)||0=1
+// 输出: 0 1 1
+0: (=, 1, _, a)
+1: (=, 0, _, b)
+2: (=, 1, _, c)
+3: (&&, a, b, t1)
+4: (=, t1, _, r1)
+5: (||, a, b, t2)
+6: (=, t2, _, r2)
+7: (&&, a, c, t3)
+8: (||, t3, b, t4)
+9: (=, t4, _, r3)
+10: (write, r1, _, _)
+11: (write, r2, _, _)
+12: (write, r3, _, _)
+13: (return, r3, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  %b_ptr = alloca i32
+  %c_ptr = alloca i32
+  %r1_ptr = alloca i32
+  %r2_ptr = alloca i32
+  %r3_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 1, ptr %a_ptr
+  store i32 0, ptr %b_ptr
+  store i32 1, ptr %c_ptr
+  %rt0 = load i32, ptr %a_ptr
+  %rt1 = load i32, ptr %b_ptr
+  %t1_c1 = icmp ne i32 %rt0, 0
+  %t1_c2 = icmp ne i32 %rt1, 0
+  %t1_b = and i1 %t1_c1, %t1_c2
+  %t1 = zext i1 %t1_b to i32
+  store i32 %t1, ptr %r1_ptr
+  %rt2 = load i32, ptr %a_ptr
+  %rt3 = load i32, ptr %b_ptr
+  %t2_c1 = icmp ne i32 %rt2, 0
+  %t2_c2 = icmp ne i32 %rt3, 0
+  %t2_b = or i1 %t2_c1, %t2_c2
+  %t2 = zext i1 %t2_b to i32
+  store i32 %t2, ptr %r2_ptr
+  %rt4 = load i32, ptr %a_ptr
+  %rt5 = load i32, ptr %c_ptr
+  %t3_c1 = icmp ne i32 %rt4, 0
+  %t3_c2 = icmp ne i32 %rt5, 0
+  %t3_b = and i1 %t3_c1, %t3_c2
+  %t3 = zext i1 %t3_b to i32
+  %rt6 = load i32, ptr %b_ptr
+  %t4_c1 = icmp ne i32 %t3, 0
+  %t4_c2 = icmp ne i32 %rt6, 0
+  %t4_b = or i1 %t4_c1, %t4_c2
+  %t4 = zext i1 %t4_b to i32
+  store i32 %t4, ptr %r3_ptr
+  %rt7 = load i32, ptr %r1_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt7)
+  %rt8 = load i32, ptr %r2_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt8)
+  %rt9 = load i32, ptr %r3_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt9)
+  %rt10 = load i32, ptr %r3_ptr
+  ret i32 %rt10
+
+}
+

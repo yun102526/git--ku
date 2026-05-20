@@ -39,15 +39,13 @@ def parse_func_table(text):
 
 def build_func_table_from_quads(quads):
     """Try to infer function table from quads when none provided."""
-    table = {'main': {'params': [], 'entry': 0}}
-
     func_names = set()
     for op, a1, a2, res in quads:
         if op == 'call':
             func_names.add(a1)
 
     if len(func_names) == 0:
-        return table
+        return {'main': {'params': [], 'entry': 0}}
 
     # Find function boundaries: after a return, next function starts
     boundaries = [0]
@@ -57,26 +55,45 @@ def build_func_table_from_quads(quads):
 
     # Collect variable names used in each function to infer params
     func_names_list = sorted(func_names)
-    for idx, start in enumerate(boundaries[1:], 1):
-        if idx <= len(func_names_list):
-            fname = func_names_list[idx - 1]
-            # Find vars used before being assigned in this function
-            end = boundaries[idx] if idx < len(boundaries) else len(quads)
-            used_vars = set()
-            assigned_vars = set()
-            params = []
-            for qi in range(start, end):
-                op, a1, a2, res = quads[qi]
-                if op == '=':
-                    if res and res != '_' and not res.isdigit():
-                        assigned_vars.add(res)
-                else:
-                    for arg in [a1, a2]:
-                        if arg and arg != '_' and not arg.isdigit() and arg not in assigned_vars:
-                            if arg not in used_vars and not arg.startswith('t'):
+    table = {}
+
+    for idx, start in enumerate(boundaries):
+        end = boundaries[idx + 1] if idx + 1 < len(boundaries) else len(quads)
+        used_vars = set()
+        assigned_vars = set()
+        params = []
+        for qi in range(start, end):
+            op, a1, a2, res = quads[qi]
+            if op == '=':
+                if res and res != '_' and not res.isdigit() and not (res.startswith('t') and res[1:].isdigit()):
+                    assigned_vars.add(res)
+            else:
+                for arg in [a1, a2]:
+                    if arg and arg != '_' and not arg.isdigit():
+                        if not (arg.startswith('t') and arg[1:].isdigit()):
+                            if arg not in assigned_vars and arg not in used_vars:
                                 used_vars.add(arg)
                                 params.append(arg)
-            table[fname] = {'params': params, 'entry': start}
+
+        # Determine function name
+        if idx == 0:
+            # First function is always main
+            name = 'main'
+        elif idx <= len(func_names_list):
+            name = func_names_list[idx - 1]
+        else:
+            name = f'_func{idx}'
+
+        table[name] = {'params': params, 'entry': start}
+
+    if 'main' not in table:
+        # First function must be main
+        first_start = boundaries[0]
+        for name, info in table.items():
+            if info['entry'] == first_start:
+                table['main'] = info
+                del table[name]
+                break
 
     return table
 
@@ -264,9 +281,19 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
                     ti = leaders.index(target_rel)
                     tbe = leaders[ti + 1] if ti + 1 < len(leaders) else len(quads)
                     if tbe - target_rel == 1 and quads[target_rel][0] == 'J':
-                        ti_next = ti + 1
-                        if ti_next < len(leaders):
-                            target_name = block_of[leaders[ti_next]]
+                        resolved_target = int(quads[target_rel][3])
+                        # Follow J chain to non-J block
+                        visited = {target_rel}
+                        while resolved_target in leaders:
+                            ri = leaders.index(resolved_target)
+                            rbe = leaders[ri + 1] if ri + 1 < len(leaders) else len(quads)
+                            if rbe - resolved_target != 1 or quads[resolved_target][0] != 'J':
+                                break
+                            if resolved_target in visited:
+                                break
+                            visited.add(resolved_target)
+                            resolved_target = int(quads[resolved_target][3])
+                        target_name = block_of[resolved_target]
                 blk.append(f'  %brc_{qi} = icmp {ll_c} i32 {v1}, {v2}')
                 blk.append(f'  br i1 %brc_{qi}, label %{target_name}, label %{next_name}')
 
@@ -584,6 +611,7 @@ def find_llvm_tool(name):
 
 def compile_and_run(llvm_ir):
     import uuid
+    clang_err = None
     clang = find_llvm_tool('clang')
     if clang:
         try:
@@ -598,7 +626,8 @@ def compile_and_run(llvm_ir):
                     capture_output=True, text=True, timeout=20
                 )
                 if compile_res.returncode != 0:
-                    raise Exception(f'clang编译失败: {compile_res.stderr[:200]}')
+                    clang_err = f'clang编译失败: {compile_res.stderr[:300]}'
+                    raise Exception(clang_err)
                 run_res = subprocess.run(
                     [exe_path],
                     capture_output=True, text=True, timeout=10
@@ -608,8 +637,10 @@ def compile_and_run(llvm_ir):
                 for f in [ll_path, exe_path]:
                     try: os.unlink(f)
                     except OSError: pass
-        except Exception:
-            pass
+        except subprocess.TimeoutExpired:
+            clang_err = 'clang编译超时'
+        except Exception as e:
+            clang_err = str(e)
 
     lli = find_llvm_tool('lli')
     if lli:
@@ -622,11 +653,19 @@ def compile_and_run(llvm_ir):
                     [lli, temp_path],
                     capture_output=True, text=True, timeout=10
                 )
+                if run_res.returncode != 0 and not run_res.stdout.strip():
+                    raise Exception(f'lli执行失败(返回码{run_res.returncode}): {run_res.stderr[:200]}')
                 return run_res.stdout.strip(), run_res.returncode, 'lli'
             finally:
                 os.unlink(temp_path)
         except FileNotFoundError:
             raise Exception('未找到lli或clang。请安装LLVM: sudo apt install llvm-clang (Linux) 或 https://llvm.org (Windows)')
+        except subprocess.TimeoutExpired:
+            raise Exception(f'LLVM执行超时 (clang错误: {clang_err})' if clang_err else 'LLVM执行超时')
+        except Exception as e:
+            raise Exception(f'LLVM执行失败: {str(e)[:200]}')
+    if clang_err:
+        raise Exception(clang_err)
     raise Exception('未找到LLVM工具链(clang/lli)。请安装LLVM。')
 
 
@@ -691,7 +730,18 @@ def process_42(source_code, inputs=None):
     """Convenience: run 3.2 first to get quads, then 4.2. For end-to-end testing."""
     from task32 import process_32 as run_32
 
-    result_32 = run_32(source_code, inputs)
+    # Strip === markers from test file annotations
+    clean_lines = []
+    skip_until_src = False
+    for line in source_code.split('\n'):
+        s = line.strip()
+        if s.startswith('==='):
+            skip_until_src = False
+            continue
+        clean_lines.append(line)
+    clean_code = '\n'.join(clean_lines)
+
+    result_32 = run_32(clean_code, inputs)
     if 'error' in result_32:
         return {'error': result_32['error']}
 

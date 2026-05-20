@@ -1,0 +1,227 @@
+--- 成功加载外部源文件: 测试用例/3.2/test3.2-2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test3.2-2.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	5
+isPrime	700	5
+(	201	5
+int	102	5
+x	700	5
+)	202	5
+;	303	5
+int	102	7
+main	700	7
+(	201	7
+void	107	7
+)	202	7
+{	301	8
+int	102	9
+num	700	9
+;	303	9
+int	102	10
+res	700	10
+;	303	10
+read	112	11
+(	201	11
+num	700	11
+)	202	11
+;	303	11
+if	103	12
+(	201	12
+isPrime	700	12
+(	201	12
+num	700	12
+)	202	12
+==	223	12
+1	400	12
+)	202	12
+{	301	13
+res	700	14
+=	219	14
+1	400	14
+;	303	14
+}	302	15
+else	104	16
+{	301	17
+res	700	18
+=	219	18
+0	400	18
+;	303	18
+}	302	19
+write	700	20
+(	201	20
+res	700	20
+)	202	20
+;	303	20
+return	106	21
+0	400	21
+;	303	21
+}	302	22
+int	102	23
+isPrime	700	23
+(	201	23
+int	102	23
+x	700	23
+)	202	23
+{	301	24
+int	102	25
+i	700	25
+;	303	25
+int	102	26
+yes	700	26
+;	303	26
+i	700	27
+=	219	27
+2	400	27
+;	303	27
+if	103	28
+(	201	28
+x	700	28
+<	216	28
+2	400	28
+)	202	28
+{	301	29
+yes	700	30
+=	219	30
+0	400	30
+;	303	30
+}	302	31
+else	104	32
+{	301	33
+yes	700	34
+=	219	34
+1	400	34
+;	303	34
+}	302	35
+while	105	36
+(	201	36
+i	700	36
+*	213	36
+i	700	36
+<=	221	36
+x	700	36
+)	202	36
+{	301	37
+if	103	38
+(	201	38
+x	700	38
+/	214	38
+i	700	38
+*	213	38
+i	700	38
+==	223	38
+x	700	38
+)	202	38
+{	301	39
+yes	700	40
+=	219	40
+0	400	40
+;	303	40
+}	302	41
+i	700	42
+=	219	42
+i	700	42
++	211	42
+1	400	42
+;	303	42
+}	302	43
+return	106	44
+yes	700	44
+;	303	44
+}	302	45
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int isPrime)[5]
+    Param(int x)[5]
+  FunctionDef(int main)[7]
+    Compound
+      VarDecl(int num)[9]
+      VarDecl(int res)[10]
+      ExprStmt
+        CallExpr(read)[11]
+          Identifier(num)[11]
+      IfStmt
+        BinaryExpr(==)[12]
+          CallExpr(isPrime)[12]
+            Identifier(num)[12]
+          Literal(1)[12]
+        Compound
+          ExprStmt
+            AssignExpr[14]
+              Identifier(res)[14]
+              Literal(1)[14]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[18]
+              Identifier(res)[18]
+              Literal(0)[18]
+      ExprStmt
+        CallExpr(write)[20]
+          Identifier(res)[20]
+      ReturnStmt
+        Literal(0)[21]
+  FunctionDef(int isPrime)[23]
+    Param(int x)[23]
+    Compound
+      VarDecl(int i)[25]
+      VarDecl(int yes)[26]
+      ExprStmt
+        AssignExpr[27]
+          Identifier(i)[27]
+          Literal(2)[27]
+      IfStmt
+        BinaryExpr(<)[28]
+          Identifier(x)[28]
+          Literal(2)[28]
+        Compound
+          ExprStmt
+            AssignExpr[30]
+              Identifier(yes)[30]
+              Literal(0)[30]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[34]
+              Identifier(yes)[34]
+              Literal(1)[34]
+      WhileStmt
+        BinaryExpr(<=)[36]
+          BinaryExpr(*)[36]
+            Identifier(i)[36]
+            Identifier(i)[36]
+          Identifier(x)[36]
+        Compound
+          IfStmt
+            BinaryExpr(==)[38]
+              BinaryExpr(*)[38]
+                BinaryExpr(/)[38]
+                  Identifier(x)[38]
+                  Identifier(i)[38]
+                Identifier(i)[38]
+              Identifier(x)[38]
+            Compound
+              ExprStmt
+                AssignExpr[40]
+                  Identifier(yes)[40]
+                  Literal(0)[40]
+          ExprStmt
+            AssignExpr[42]
+              Identifier(i)[42]
+              BinaryExpr(+)[42]
+                Identifier(i)[42]
+                Literal(1)[42]
+      ReturnStmt
+        Identifier(yes)[44]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+isPrime: (isPrime, function, int, params=['x'])
+main: (main, function, int, params=[])
+num: (num, var, int)
+res: (res, var, int)
+x: (x, param, int)
+i: (i, var, int)
+yes: (yes, var, int)

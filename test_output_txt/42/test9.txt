@@ -1,0 +1,79 @@
+--- 成功加载: 测试用例/4.2/test9.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test9.txt
+
+--- [输入] 四元式流 ---
+// 测试循环中的break和continue控制流
+// i从0到9: 跳过i=3(continue), 在i=8处break
+// 累加: 0+1+2+4+5+6+7=25
+0: (=, 0, _, i)
+1: (=, 0, _, sum)
+2: (=, 0, _, i)
+3: (J>=, i, 10, 13)
+4: (J!=, i, 3, 6)
+5: (J, _, _, 10)
+6: (J!=, i, 8, 8)
+7: (J, _, _, 13)
+8: (+, sum, i, t1)
+9: (=, t1, _, sum)
+10: (+, i, 1, t2)
+11: (=, t2, _, i)
+12: (J, _, _, 3)
+13: (write, sum, _, _)
+14: (return, sum, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %i_ptr = alloca i32
+  %sum_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 0, ptr %i_ptr
+  store i32 0, ptr %sum_ptr
+  store i32 0, ptr %i_ptr
+  br label %block1
+
+block1:
+  %rt0 = load i32, ptr %i_ptr
+  %brc_3 = icmp sge i32 %rt0, 10
+  br i1 %brc_3, label %block8, label %block2
+
+block2:
+  %rt1 = load i32, ptr %i_ptr
+  %brc_4 = icmp ne i32 %rt1, 3
+  br i1 %brc_4, label %block4, label %block7
+
+block4:
+  %rt2 = load i32, ptr %i_ptr
+  %brc_6 = icmp ne i32 %rt2, 8
+  br i1 %brc_6, label %block6, label %block8
+
+block6:
+  %rt3 = load i32, ptr %sum_ptr
+  %rt4 = load i32, ptr %i_ptr
+  %t1 = add i32 %rt3, %rt4
+  store i32 %t1, ptr %sum_ptr
+  br label %block7
+
+block7:
+  %rt5 = load i32, ptr %i_ptr
+  %t2 = add i32 %rt5, 1
+  store i32 %t2, ptr %i_ptr
+  br label %block1
+
+block8:
+  %rt6 = load i32, ptr %sum_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt6)
+  %rt7 = load i32, ptr %sum_ptr
+  ret i32 %rt7
+
+}
+

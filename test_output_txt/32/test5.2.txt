@@ -1,0 +1,178 @@
+--- 成功加载外部源文件: 测试用例/3.2/test5.2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test5.2.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	4
+comp	700	4
+(	201	4
+int	102	4
+,	304	4
+int	102	4
+)	202	4
+;	303	4
+main	700	5
+(	201	5
+)	202	5
+{	301	6
+int	102	7
+m	700	7
+,	304	7
+k	700	7
+,	304	7
+result	700	7
+;	303	7
+m	700	8
+=	219	8
+read	112	8
+(	201	8
+)	202	8
+;	303	8
+k	700	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
+;	303	9
+result	700	10
+=	219	10
+comp	700	10
+(	201	10
+m	700	10
+,	304	10
+k	700	10
+)	202	10
+;	303	10
+write	700	11
+(	201	11
+result	700	11
+)	202	11
+;	303	11
+}	302	12
+int	102	14
+comp	700	14
+(	201	14
+int	102	14
+n	700	14
+,	304	14
+int	102	14
+i	700	14
+)	202	14
+{	301	14
+int	102	15
+a	700	15
+;	303	15
+if	103	16
+(	201	16
+n	700	16
+==	223	16
+i	700	16
+||	218	16
+i	700	16
+==	223	16
+0	400	16
+)	202	16
+{	301	17
+return	106	18
+1	400	18
+;	303	18
+}	302	19
+a	700	20
+=	219	20
+comp	700	20
+(	201	20
+n	700	20
+-	212	20
+1	400	20
+,	304	20
+i	700	20
+)	202	20
++	211	20
+comp	700	20
+(	201	20
+n	700	20
+-	212	20
+1	400	20
+,	304	20
+i	700	20
+-	212	20
+1	400	20
+)	202	20
+;	303	20
+return	106	21
+a	700	21
+;	303	21
+}	302	22
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int comp)[4]
+    Param(int _p0)[4]
+    Param(int _p1)[4]
+  FunctionDef(int main)[5]
+    Compound
+      VarDecl(int m)[7]
+      VarDecl(int k)[7]
+      VarDecl(int result)[7]
+      ExprStmt
+        AssignExpr[8]
+          Identifier(m)[8]
+          CallExpr(read)[8]
+      ExprStmt
+        AssignExpr[9]
+          Identifier(k)[9]
+          CallExpr(read)[9]
+      ExprStmt
+        AssignExpr[10]
+          Identifier(result)[10]
+          CallExpr(comp)[10]
+            Identifier(m)[10]
+            Identifier(k)[10]
+      ExprStmt
+        CallExpr(write)[11]
+          Identifier(result)[11]
+  FunctionDef(int comp)[14]
+    Param(int n)[14]
+    Param(int i)[14]
+    Compound
+      VarDecl(int a)[15]
+      IfStmt
+        BinaryExpr(||)[16]
+          BinaryExpr(==)[16]
+            Identifier(n)[16]
+            Identifier(i)[16]
+          BinaryExpr(==)[16]
+            Identifier(i)[16]
+            Literal(0)[16]
+        Compound
+          ReturnStmt
+            Literal(1)[18]
+      ExprStmt
+        AssignExpr[20]
+          Identifier(a)[20]
+          BinaryExpr(+)[20]
+            CallExpr(comp)[20]
+              BinaryExpr(-)[20]
+                Identifier(n)[20]
+                Literal(1)[20]
+              Identifier(i)[20]
+            CallExpr(comp)[20]
+              BinaryExpr(-)[20]
+                Identifier(n)[20]
+                Literal(1)[20]
+              BinaryExpr(-)[20]
+                Identifier(i)[20]
+                Literal(1)[20]
+      ReturnStmt
+        Identifier(a)[21]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+comp: (comp, function, int, params=['n', 'i'])
+main: (main, function, int, params=[])
+m: (m, var, int)
+k: (k, var, int)
+result: (result, var, int)
+n: (n, param, int)
+i: (i, param, int)
+a: (a, var, int)

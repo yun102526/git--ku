@@ -1,0 +1,432 @@
+--- 成功加载外部源文件: 测试用例/3.2/test_32_comprehensive1.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test_32_comprehensive1.txt
+默认输入: [5, 10, 3, 2, 1, 5]
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	1
+addAdjust	700	1
+(	201	1
+int	102	1
+x	700	1
+,	304	1
+int	102	1
+y	700	1
+)	202	1
+;	303	1
+int	102	2
+main	700	2
+(	201	2
+void	107	2
+)	202	2
+{	301	2
+int	102	3
+n	700	3
+,	304	3
+i	700	3
+,	304	3
+sum	700	3
+,	304	3
+flag	700	3
+,	304	3
+arr	700	3
+[	305	3
+5	400	3
+]	306	3
+,	304	3
+result	700	3
+;	303	3
+n	700	4
+=	219	4
+read	112	4
+(	201	4
+)	202	4
+;	303	4
+i	700	5
+=	219	5
+0	400	5
+;	303	5
+sum	700	6
+=	219	6
+0	400	6
+;	303	6
+flag	700	7
+=	219	7
+1	400	7
+;	303	7
+while	105	8
+(	201	8
+i	700	8
+<	216	8
+5	400	8
+)	202	8
+{	301	8
+arr	700	9
+[	305	9
+i	700	9
+]	306	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
+;	303	9
+i	700	10
+=	219	10
+i	700	10
++	211	10
+1	400	10
+;	303	10
+}	302	11
+for	108	12
+(	201	12
+i	700	12
+=	219	12
+0	400	12
+;	303	12
+i	700	12
+<	216	12
+5	400	12
+;	303	12
+i	700	12
+=	219	12
+i	700	12
++	211	12
+1	400	12
+)	202	12
+{	301	12
+if	103	13
+(	201	13
+arr	700	13
+[	305	13
+i	700	13
+]	306	13
+<	216	13
+0	400	13
+)	202	13
+continue	110	14
+;	303	14
+if	103	15
+(	201	15
+arr	700	15
+[	305	15
+i	700	15
+]	306	15
+==	223	15
+0	400	15
+)	202	15
+break	111	16
+;	303	16
+sum	700	17
+=	219	17
+sum	700	17
++	211	17
+arr	700	17
+[	305	17
+i	700	17
+]	306	17
+;	303	17
+}	302	18
+do	109	19
+{	301	19
+sum	700	20
+=	219	20
+sum	700	20
++	211	20
+1	400	20
+;	303	20
+n	700	21
+=	219	21
+n	700	21
+-	212	21
+1	400	21
+;	303	21
+}	302	22
+while	105	22
+(	201	22
+n	700	22
+>	220	22
+0	400	22
+)	202	22
+;	303	22
+if	103	23
+(	201	23
+(	201	23
+sum	700	23
+>	220	23
+10	400	23
+&&	217	23
+flag	700	23
+==	223	23
+1	400	23
+)	202	23
+||	218	23
+n	700	23
+==	223	23
+0	400	23
+)	202	23
+{	301	23
+result	700	24
+=	219	24
+addAdjust	700	24
+(	201	24
+sum	700	24
+,	304	24
+2	400	24
+)	202	24
+;	303	24
+}	302	25
+else	104	25
+{	301	25
+result	700	26
+=	219	26
+sum	700	26
+/	214	26
+2	400	26
++	211	26
+sum	700	26
+%	215	26
+2	400	26
+;	303	26
+}	302	27
+write	700	28
+(	201	28
+result	700	28
+)	202	28
+;	303	28
+return	106	29
+result	700	29
+;	303	29
+}	302	30
+int	102	31
+addAdjust	700	31
+(	201	31
+int	102	31
+x	700	31
+,	304	31
+int	102	31
+y	700	31
+)	202	31
+{	301	31
+int	102	32
+r	700	32
+;	303	32
+r	700	33
+=	219	33
+x	700	33
++	211	33
+y	700	33
+;	303	33
+if	103	34
+(	201	34
+r	700	34
+>	220	34
+20	400	34
+)	202	34
+{	301	34
+r	700	35
+=	219	35
+r	700	35
+-	212	35
+3	400	35
+;	303	35
+}	302	36
+else	104	36
+{	301	36
+r	700	37
+=	219	37
+r	700	37
++	211	37
+3	400	37
+;	303	37
+}	302	38
+return	106	39
+r	700	39
+;	303	39
+}	302	40
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int addAdjust)[1]
+    Param(int x)[1]
+    Param(int y)[1]
+  FunctionDef(int main)[2]
+    Compound
+      VarDecl(int n)[3]
+      VarDecl(int i)[3]
+      VarDecl(int sum)[3]
+      VarDecl(int flag)[3]
+      VarDecl(int arr[5])[3]
+      VarDecl(int result)[3]
+      ExprStmt
+        AssignExpr[4]
+          Identifier(n)[4]
+          CallExpr(read)[4]
+      ExprStmt
+        AssignExpr[5]
+          Identifier(i)[5]
+          Literal(0)[5]
+      ExprStmt
+        AssignExpr[6]
+          Identifier(sum)[6]
+          Literal(0)[6]
+      ExprStmt
+        AssignExpr[7]
+          Identifier(flag)[7]
+          Literal(1)[7]
+      WhileStmt
+        BinaryExpr(<)[8]
+          Identifier(i)[8]
+          Literal(5)[8]
+        Compound
+          ExprStmt
+            AssignExpr[9]
+              ArrayAccess[9]
+                Identifier(arr)[9]
+                Identifier(i)[9]
+              CallExpr(read)[9]
+          ExprStmt
+            AssignExpr[10]
+              Identifier(i)[10]
+              BinaryExpr(+)[10]
+                Identifier(i)[10]
+                Literal(1)[10]
+      ForStmt
+        Init
+          AssignExpr[12]
+            Identifier(i)[12]
+            Literal(0)[12]
+        Condition
+          BinaryExpr(<)[12]
+            Identifier(i)[12]
+            Literal(5)[12]
+        Step
+          AssignExpr[12]
+            Identifier(i)[12]
+            BinaryExpr(+)[12]
+              Identifier(i)[12]
+              Literal(1)[12]
+        Compound
+          IfStmt
+            BinaryExpr(<)[13]
+              ArrayAccess[13]
+                Identifier(arr)[13]
+                Identifier(i)[13]
+              Literal(0)[13]
+            Compound
+              ContinueStmt[14]
+          IfStmt
+            BinaryExpr(==)[15]
+              ArrayAccess[15]
+                Identifier(arr)[15]
+                Identifier(i)[15]
+              Literal(0)[15]
+            Compound
+              BreakStmt[16]
+          ExprStmt
+            AssignExpr[17]
+              Identifier(sum)[17]
+              BinaryExpr(+)[17]
+                Identifier(sum)[17]
+                ArrayAccess[17]
+                  Identifier(arr)[17]
+                  Identifier(i)[17]
+      DoWhileStmt
+        Compound
+          ExprStmt
+            AssignExpr[20]
+              Identifier(sum)[20]
+              BinaryExpr(+)[20]
+                Identifier(sum)[20]
+                Literal(1)[20]
+          ExprStmt
+            AssignExpr[21]
+              Identifier(n)[21]
+              BinaryExpr(-)[21]
+                Identifier(n)[21]
+                Literal(1)[21]
+        Condition
+          BinaryExpr(>)[22]
+            Identifier(n)[22]
+            Literal(0)[22]
+      IfStmt
+        BinaryExpr(||)[23]
+          BinaryExpr(&&)[23]
+            BinaryExpr(>)[23]
+              Identifier(sum)[23]
+              Literal(10)[23]
+            BinaryExpr(==)[23]
+              Identifier(flag)[23]
+              Literal(1)[23]
+          BinaryExpr(==)[23]
+            Identifier(n)[23]
+            Literal(0)[23]
+        Compound
+          ExprStmt
+            AssignExpr[24]
+              Identifier(result)[24]
+              CallExpr(addAdjust)[24]
+                Identifier(sum)[24]
+                Literal(2)[24]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[26]
+              Identifier(result)[26]
+              BinaryExpr(+)[26]
+                BinaryExpr(/)[26]
+                  Identifier(sum)[26]
+                  Literal(2)[26]
+                BinaryExpr(%)[26]
+                  Identifier(sum)[26]
+                  Literal(2)[26]
+      ExprStmt
+        CallExpr(write)[28]
+          Identifier(result)[28]
+      ReturnStmt
+        Identifier(result)[29]
+  FunctionDef(int addAdjust)[31]
+    Param(int x)[31]
+    Param(int y)[31]
+    Compound
+      VarDecl(int r)[32]
+      ExprStmt
+        AssignExpr[33]
+          Identifier(r)[33]
+          BinaryExpr(+)[33]
+            Identifier(x)[33]
+            Identifier(y)[33]
+      IfStmt
+        BinaryExpr(>)[34]
+          Identifier(r)[34]
+          Literal(20)[34]
+        Compound
+          ExprStmt
+            AssignExpr[35]
+              Identifier(r)[35]
+              BinaryExpr(-)[35]
+                Identifier(r)[35]
+                Literal(3)[35]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[37]
+              Identifier(r)[37]
+              BinaryExpr(+)[37]
+                Identifier(r)[37]
+                Literal(3)[37]
+      ReturnStmt
+        Identifier(r)[39]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+addAdjust: (addAdjust, function, int, params=['x', 'y'])
+main: (main, function, int, params=[])
+n: (n, var, int)
+i: (i, var, int)
+sum: (sum, var, int)
+flag: (flag, var, int)
+arr: (arr, array, int, size=5)
+result: (result, var, int)
+x: (x, param, int)
+y: (y, param, int)
+r: (r, var, int)

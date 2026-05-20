@@ -1,0 +1,42 @@
+--- 成功加载: 测试用例/4.2/test10.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test10.txt
+
+--- [输入] 四元式流 ---
+// 测试取模(%)运算: 17%5=2
+// 同时也测试了赋值、输出和返回
+0: (=, 17, _, a)
+1: (=, 5, _, b)
+2: (%, a, b, t1)
+3: (=, t1, _, r)
+4: (write, r, _, _)
+5: (return, r, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  %b_ptr = alloca i32
+  %r_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 17, ptr %a_ptr
+  store i32 5, ptr %b_ptr
+  %rt0 = load i32, ptr %a_ptr
+  %rt1 = load i32, ptr %b_ptr
+  %t1 = srem i32 %rt0, %rt1
+  store i32 %t1, ptr %r_ptr
+  %rt2 = load i32, ptr %r_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt2)
+  %rt3 = load i32, ptr %r_ptr
+  ret i32 %rt3
+
+}
+

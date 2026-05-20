@@ -1,0 +1,56 @@
+--- 成功加载: 测试用例/4.2/test2.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test2.txt
+
+--- [输入] 四元式流 ---
+// a=10, b=20, 若a<=b则max=b否则max=a → max=20
+// 测试四元式: J<=条件跳转, J无条件跳转, write输出
+0: (=, 10, _, a)
+1: (=, 20, _, b)
+2: (J<=, a, b, 5)
+3: (=, a, _, max)
+4: (J, _, _, 6)
+5: (=, b, _, max)
+6: (write, max, _, _)
+7: (return, max, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  %b_ptr = alloca i32
+  %max_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 10, ptr %a_ptr
+  store i32 20, ptr %b_ptr
+  %rt0 = load i32, ptr %a_ptr
+  %rt1 = load i32, ptr %b_ptr
+  %brc_2 = icmp sle i32 %rt0, %rt1
+  br i1 %brc_2, label %block2, label %block1
+
+block1:
+  %rt2 = load i32, ptr %a_ptr
+  store i32 %rt2, ptr %max_ptr
+  br label %block3
+
+block2:
+  %rt3 = load i32, ptr %b_ptr
+  store i32 %rt3, ptr %max_ptr
+  br label %block3
+
+block3:
+  %rt4 = load i32, ptr %max_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt4)
+  %rt5 = load i32, ptr %max_ptr
+  ret i32 %rt5
+
+}
+

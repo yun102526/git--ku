@@ -1,0 +1,134 @@
+--- 成功加载外部源文件: 测试用例/3.2/test0.2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test0.2.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+main	700	3
+(	201	3
+)	202	3
+{	301	3
+int	102	4
+x	700	4
+=	219	4
+2	400	4
+;	303	4
+int	102	5
+y	700	5
+=	219	5
+3	400	5
+;	303	5
+int	102	6
+a	700	6
+,	304	6
+b	700	6
+,	304	6
+c	700	6
+,	304	6
+d	700	6
+;	303	6
+a	700	7
+=	219	7
+x	700	7
+&&	217	7
+y	700	7
+;	303	7
+b	700	8
+=	219	8
+x	700	8
+&&	217	8
+0	400	8
+;	303	8
+c	700	9
+=	219	9
+x	700	9
+||	218	9
+y	700	9
+;	303	9
+d	700	10
+=	219	10
+x	700	10
+||	218	10
+0	400	10
+;	303	10
+write	700	11
+(	201	11
+a	700	11
+)	202	11
+;	303	11
+write	700	12
+(	201	12
+b	700	12
+)	202	12
+;	303	12
+write	700	13
+(	201	13
+c	700	13
+)	202	13
+;	303	13
+write	700	14
+(	201	14
+d	700	14
+)	202	14
+;	303	14
+}	302	15
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDef(int main)[3]
+    Compound
+      VarDecl(int x)[4]
+        Init
+          Literal(2)[4]
+      VarDecl(int y)[5]
+        Init
+          Literal(3)[5]
+      VarDecl(int a)[6]
+      VarDecl(int b)[6]
+      VarDecl(int c)[6]
+      VarDecl(int d)[6]
+      ExprStmt
+        AssignExpr[7]
+          Identifier(a)[7]
+          BinaryExpr(&&)[7]
+            Identifier(x)[7]
+            Identifier(y)[7]
+      ExprStmt
+        AssignExpr[8]
+          Identifier(b)[8]
+          BinaryExpr(&&)[8]
+            Identifier(x)[8]
+            Literal(0)[8]
+      ExprStmt
+        AssignExpr[9]
+          Identifier(c)[9]
+          BinaryExpr(||)[9]
+            Identifier(x)[9]
+            Identifier(y)[9]
+      ExprStmt
+        AssignExpr[10]
+          Identifier(d)[10]
+          BinaryExpr(||)[10]
+            Identifier(x)[10]
+            Literal(0)[10]
+      ExprStmt
+        CallExpr(write)[11]
+          Identifier(a)[11]
+      ExprStmt
+        CallExpr(write)[12]
+          Identifier(b)[12]
+      ExprStmt
+        CallExpr(write)[13]
+          Identifier(c)[13]
+      ExprStmt
+        CallExpr(write)[14]
+          Identifier(d)[14]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+main: (main, function, int, params=[])
+x: (x, var, int)
+y: (y, var, int)
+a: (a, var, int)
+b: (b, var, int)
+c: (c, var, int)
+d: (d, var, int)

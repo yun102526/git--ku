@@ -1,0 +1,64 @@
+--- 成功加载: 测试用例/4.2/test8.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test8.txt
+
+--- [输入] 四元式流 ---
+// 测试函数定义与调用: param传参, call调用, return返回
+// main中调用add(10,20), 结果=30
+// 函数表: main入口=0; add入口=8, 参数=x,y
+0: (=, 10, _, a)
+1: (=, 20, _, b)
+2: (param, a, _, _)
+3: (param, b, _, _)
+4: (call, add, 2, t1)
+5: (=, t1, _, r)
+6: (write, r, _, _)
+7: (return, r, _, _)
+8: (+, x, y, t2)
+9: (return, t2, _, _)
+
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  %add_ptr = alloca i32
+  %b_ptr = alloca i32
+  %r_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 10, ptr %a_ptr
+  store i32 20, ptr %b_ptr
+  %rt0 = load i32, ptr %a_ptr
+  %rt1 = load i32, ptr %b_ptr
+  %t1 = call i32 @add(i32 %rt0, i32 %rt1)
+  store i32 %t1, ptr %r_ptr
+  %rt2 = load i32, ptr %r_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt2)
+  %rt3 = load i32, ptr %r_ptr
+  ret i32 %rt3
+
+}
+
+define i32 @add(i32 %x, i32 %y) {
+entry:
+  %x_ptr = alloca i32
+  %y_ptr = alloca i32
+  store i32 %x, ptr %x_ptr
+  store i32 %y, ptr %y_ptr
+  br label %block0
+
+block0:
+  %rt0 = load i32, ptr %x_ptr
+  %rt1 = load i32, ptr %y_ptr
+  %t2 = add i32 %rt0, %rt1
+  ret i32 %t2
+
+}
+
