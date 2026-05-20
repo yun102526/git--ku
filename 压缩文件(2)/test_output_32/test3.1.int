@@ -1,0 +1,39 @@
+--- 成功加载外部源文件: 测试用例/3.2/test3.1.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test3.1.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+void	107	2
+f	700	2
+(	201	2
+)	202	2
+;	303	2
+main	700	4
+(	201	4
+)	202	4
+{	301	4
+f	700	5
+(	201	5
+)	202	5
+;	303	5
+}	302	6
+f	700	8
+(	201	8
+)	202	8
+{	301	8
+}	302	8
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(void f)[2]
+  FunctionDef(int main)[4]
+    Compound
+      ExprStmt
+        CallExpr(f)[5]
+  FunctionDef(int f)[8]
+    Compound
+
+--- [编译前端] 符号表 (Symbol Table) ---
+f: (f, function, int, params=[])
+main: (main, function, int, params=[])

@@ -1,0 +1,121 @@
+--- 成功加载外部源文件: 测试用例/3.2/test2.3.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test2.3.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+a	700	2
+=	219	2
+1	400	2
+;	303	2
+main	700	4
+(	201	4
+)	202	4
+{	301	4
+int	102	6
+i	700	6
+=	219	6
+1	400	6
+,	304	6
+sum	700	6
+=	219	6
+0	400	6
+,	304	6
+N	700	6
+;	303	6
+N	700	7
+=	219	7
+read	112	7
+(	201	7
+)	202	7
+;	303	7
+while	105	9
+(	201	9
+i	700	9
+<	216	9
+N	700	9
+)	202	9
+{	301	9
+if	103	10
+(	201	10
+i	700	10
+%	215	10
+2	400	10
+==	223	10
+0	400	10
+)	202	10
+{	301	10
+sum	700	11
+=	219	11
+sum	700	11
++	211	11
+i	700	11
+;	303	11
+}	302	12
+i	700	13
+=	219	13
+i	700	13
++	211	13
+1	400	13
+;	303	13
+}	302	14
+write	700	15
+(	201	15
+sum	700	15
+)	202	15
+;	303	15
+}	302	16
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  VarDecl(int a)[2]
+    Init
+      Literal(1)[2]
+  FunctionDef(int main)[4]
+    Compound
+      VarDecl(int i)[6]
+        Init
+          Literal(1)[6]
+      VarDecl(int sum)[6]
+        Init
+          Literal(0)[6]
+      VarDecl(int N)[6]
+      ExprStmt
+        AssignExpr[7]
+          Identifier(N)[7]
+          CallExpr(read)[7]
+      WhileStmt
+        BinaryExpr(<)[9]
+          Identifier(i)[9]
+          Identifier(N)[9]
+        Compound
+          IfStmt
+            BinaryExpr(==)[10]
+              BinaryExpr(%)[10]
+                Identifier(i)[10]
+                Literal(2)[10]
+              Literal(0)[10]
+            Compound
+              ExprStmt
+                AssignExpr[11]
+                  Identifier(sum)[11]
+                  BinaryExpr(+)[11]
+                    Identifier(sum)[11]
+                    Identifier(i)[11]
+          ExprStmt
+            AssignExpr[13]
+              Identifier(i)[13]
+              BinaryExpr(+)[13]
+                Identifier(i)[13]
+                Literal(1)[13]
+      ExprStmt
+        CallExpr(write)[15]
+          Identifier(sum)[15]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+a: (a, var, int)
+main: (main, function, int, params=[])
+i: (i, var, int)
+sum: (sum, var, int)
+N: (N, var, int)

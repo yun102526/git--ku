@@ -1,0 +1,199 @@
+--- 成功加载外部源文件: 测试用例/3.2/test3.4.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test3.4.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+a	700	2
+=	219	2
+1	400	2
+;	303	2
+int	102	4
+sum	700	4
+(	201	4
+int	102	4
+,	304	4
+int	102	4
+)	202	4
+;	303	4
+int	102	5
+max	700	5
+(	201	5
+int	102	5
+,	304	5
+int	102	5
+)	202	5
+;	303	5
+main	700	6
+(	201	6
+)	202	6
+{	301	6
+int	102	8
+N	700	8
+=	219	8
+read	112	8
+(	201	8
+)	202	8
+;	303	8
+int	102	9
+M	700	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
+;	303	9
+a	700	10
+=	219	10
+sum	700	10
+(	201	10
+max	700	10
+(	201	10
+M	700	10
+,	304	10
+N	700	10
+)	202	10
+,	304	10
+100	400	10
+)	202	10
+;	303	10
+write	700	11
+(	201	11
+a	700	11
+)	202	11
+;	303	11
+}	302	13
+int	102	15
+sum	700	15
+(	201	15
+int	102	15
+sum_x	700	15
+,	304	15
+int	102	15
+sum_y	700	15
+)	202	15
+{	301	15
+int	102	17
+result	700	17
+;	303	17
+result	700	18
+=	219	18
+sum_x	700	18
++	211	18
+sum_y	700	18
+;	303	18
+return	106	20
+result	700	20
+;	303	20
+}	302	22
+int	102	24
+max	700	24
+(	201	24
+int	102	24
+m_x	700	24
+,	304	24
+int	102	24
+m_y	700	24
+)	202	24
+{	301	24
+int	102	26
+result	700	26
+;	303	26
+if	103	27
+(	201	27
+m_x	700	27
+>=	222	27
+m_y	700	27
+)	202	27
+result	700	27
+=	219	27
+m_x	700	27
+;	303	27
+else	104	28
+result	700	28
+=	219	28
+m_y	700	28
+;	303	28
+return	106	29
+result	700	29
+;	303	29
+}	302	31
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  VarDecl(int a)[2]
+    Init
+      Literal(1)[2]
+  FunctionDecl(int sum)[4]
+    Param(int _p0)[4]
+    Param(int _p1)[4]
+  FunctionDecl(int max)[5]
+    Param(int _p0)[5]
+    Param(int _p1)[5]
+  FunctionDef(int main)[6]
+    Compound
+      VarDecl(int N)[8]
+        Init
+          CallExpr(read)[8]
+      VarDecl(int M)[9]
+        Init
+          CallExpr(read)[9]
+      ExprStmt
+        AssignExpr[10]
+          Identifier(a)[10]
+          CallExpr(sum)[10]
+            CallExpr(max)[10]
+              Identifier(M)[10]
+              Identifier(N)[10]
+            Literal(100)[10]
+      ExprStmt
+        CallExpr(write)[11]
+          Identifier(a)[11]
+  FunctionDef(int sum)[15]
+    Param(int sum_x)[15]
+    Param(int sum_y)[15]
+    Compound
+      VarDecl(int result)[17]
+      ExprStmt
+        AssignExpr[18]
+          Identifier(result)[18]
+          BinaryExpr(+)[18]
+            Identifier(sum_x)[18]
+            Identifier(sum_y)[18]
+      ReturnStmt
+        Identifier(result)[20]
+  FunctionDef(int max)[24]
+    Param(int m_x)[24]
+    Param(int m_y)[24]
+    Compound
+      VarDecl(int result)[26]
+      IfStmt
+        BinaryExpr(>=)[27]
+          Identifier(m_x)[27]
+          Identifier(m_y)[27]
+        Compound
+          ExprStmt
+            AssignExpr[27]
+              Identifier(result)[27]
+              Identifier(m_x)[27]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[28]
+              Identifier(result)[28]
+              Identifier(m_y)[28]
+      ReturnStmt
+        Identifier(result)[29]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+a: (a, var, int)
+sum: (sum, function, int, params=['sum_x', 'sum_y'])
+max: (max, function, int, params=['m_x', 'm_y'])
+main: (main, function, int, params=[])
+N: (N, var, int)
+M: (M, var, int)
+sum_x: (sum_x, param, int)
+sum_y: (sum_y, param, int)
+result: (result, var, int)
+m_x: (m_x, param, int)
+m_y: (m_y, param, int)

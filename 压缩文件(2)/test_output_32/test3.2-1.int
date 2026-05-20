@@ -1,0 +1,97 @@
+--- 成功加载外部源文件: 测试用例/3.2/test3.2-1.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test3.2-1.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+abs	700	2
+(	201	2
+int	102	2
+)	202	2
+;	303	2
+main	700	4
+(	201	4
+)	202	4
+{	301	4
+int	102	5
+x	700	5
+=	219	5
+-	212	5
+10	400	5
+,	304	5
+y	700	5
+;	303	5
+y	700	6
+=	219	6
+abs	700	6
+(	201	6
+x	700	6
+)	202	6
+;	303	6
+write	700	7
+(	201	7
+y	700	7
+)	202	7
+;	303	7
+}	302	8
+int	102	10
+abs	700	10
+(	201	10
+int	102	10
+x	700	10
+)	202	10
+{	301	10
+if	103	11
+(	201	11
+x	700	11
+<=	221	11
+0	400	11
+)	202	11
+return	106	11
+-	212	11
+x	700	11
+;	303	11
+return	106	12
+x	700	12
+;	303	12
+}	302	13
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int abs)[2]
+    Param(int _p0)[2]
+  FunctionDef(int main)[4]
+    Compound
+      VarDecl(int x)[5]
+        Init
+          UnaryExpr(-)[5]
+            Literal(10)[5]
+      VarDecl(int y)[5]
+      ExprStmt
+        AssignExpr[6]
+          Identifier(y)[6]
+          CallExpr(abs)[6]
+            Identifier(x)[6]
+      ExprStmt
+        CallExpr(write)[7]
+          Identifier(y)[7]
+  FunctionDef(int abs)[10]
+    Param(int x)[10]
+    Compound
+      IfStmt
+        BinaryExpr(<=)[11]
+          Identifier(x)[11]
+          Literal(0)[11]
+        Compound
+          ReturnStmt
+            UnaryExpr(-)[11]
+              Identifier(x)[11]
+      ReturnStmt
+        Identifier(x)[12]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+abs: (abs, function, int, params=['x'])
+main: (main, function, int, params=[])
+x: (x, param, int)
+y: (y, var, int)

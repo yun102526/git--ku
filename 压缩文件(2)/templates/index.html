@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>编译原理课程设计 - 任务3.2 &amp; 4.2</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+        h1 { text-align: center; padding: 14px 0; background: #16213e; color: #00d4ff; font-size: 20px; letter-spacing: 2px; }
+        .container { max-width: 1700px; margin: 0 auto; padding: 12px; }
+        .layout { display: grid; grid-template-columns: 280px 1fr; gap: 12px; min-height: calc(100vh - 60px); }
+        .sidebar { background: #16213e; border-radius: 10px; padding: 12px; overflow-y: auto; max-height: calc(100vh - 80px); }
+        .sidebar h3 { color: #00d4ff; font-size: 14px; margin-bottom: 8px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
+        .sidebar .test-list { list-style: none; font-size: 12px; }
+        .sidebar .test-list li { padding: 5px 8px; margin: 2px 0; border-radius: 4px; cursor: pointer; transition: .15s; color: #aaa; }
+        .sidebar .test-list li:hover { background: #2a2a4a; color: #fff; }
+        .sidebar .test-list li.active { background: #00d4ff22; color: #00d4ff; border-left: 2px solid #00d4ff; }
+        .main-panel { display: flex; flex-direction: column; gap: 12px; }
+        .input-area { background: #16213e; border-radius: 10px; padding: 12px; }
+        .input-area label { display: block; font-weight: bold; margin-bottom: 4px; color: #00d4ff; font-size: 13px; }
+        .input-area textarea { width: 100%; height: 200px; background: #0f0f23; color: #f0f0f0; border: 1px solid #2a2a4a; border-radius: 6px; padding: 10px; font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; resize: vertical; }
+        .input-row { display: flex; gap: 10px; align-items: flex-end; margin-top: 8px; flex-wrap: wrap; }
+        .input-row .field { display: flex; flex-direction: column; }
+        .input-row .field label { font-size: 11px; color: #888; margin-bottom: 2px; }
+        .input-row .field input { background: #0f0f23; color: #f0f0f0; border: 1px solid #2a2a4a; border-radius: 4px; padding: 5px 8px; font-size: 12px; width: 260px; }
+        button { background: linear-gradient(135deg, #00d4ff, #0088cc); color: #000; border: none; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; transition: .2s; }
+        button:hover { opacity: 0.9; }
+        button.run32 { background: linear-gradient(135deg, #ff9a56, #ff6b35); }
+        button.run42 { background: linear-gradient(135deg, #56d4ff, #356bff); }
+        .card { background: #16213e; border-radius: 10px; padding: 12px; max-height: 500px; overflow-y: auto; }
+        .card h2 { color: #00d4ff; font-size: 15px; margin-bottom: 8px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
+        pre { background: #0f0f23; color: #c0c0d0; padding: 8px; border-radius: 6px; overflow-x: auto; font-size: 11px; line-height: 1.4; max-height: 350px; white-space: pre-wrap; word-break: break-all; border: 1px solid #2a2a4a; }
+        .match-ok { color: #35ff6b; font-weight: bold; font-size: 16px; }
+        .match-fail { color: #ff3535; font-weight: bold; font-size: 16px; }
+        .error { color: #ff3535; background: #2a0000; padding: 8px; border-radius: 4px; font-size: 12px; }
+        .tab-buttons { display: flex; gap: 3px; margin-bottom: 8px; flex-wrap: wrap; }
+        .tab-btn { background: #2a2a4a; color: #aaa; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+        .tab-btn.active { background: #00d4ff; color: #000; font-weight: bold; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .output-badge { display: inline-block; background: #0f0f23; color: #35ff6b; padding: 2px 8px; border-radius: 3px; font-weight: bold; font-size: 12px; }
+        .compare-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .compare-table td { padding: 6px; border: 1px solid #2a2a4a; }
+        .compare-table tr:first-child { background: #0f0f23; }
+        @media (max-width: 1200px) { .layout { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<h1>编译原理课程设计 — 任务 3.2 中间代码 &amp; 4.2 四元式→LLVM</h1>
+
+<div class="container">
+    <div class="layout">
+        <div class="sidebar">
+            <h3>📂 3.2 测试用例 (源码)</h3>
+            <ul class="test-list" id="test32List">
+                {% for t in tests32 %}
+                <li data-name="{{ t.name }}" data-code="{{ t.content | e }}" data-task="32" onclick="loadTest(this)">{{ t.name }}</li>
+                {% endfor %}
+            </ul>
+            <h3 style="margin-top: 16px;">📂 4.2 测试用例 (四元式)</h3>
+            <ul class="test-list" id="test42List">
+                {% for t in tests42 %}
+                <li data-name="{{ t.name }}" data-code="{{ t.content | e }}" data-task="42" onclick="loadTest(this)">{{ t.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="main-panel">
+            <div class="input-area">
+                <label id="inputLabel">源代码 / 四元式</label>
+                <textarea id="code" placeholder="输入源代码或四元式..."></textarea>
+                <div class="input-row">
+                    <div class="field">
+                        <label>自定义输入 (逗号分隔, 供 read() 使用)</label>
+                        <input type="text" id="inputs" placeholder="例: 5, 10, 3, 2, 1, 5">
+                    </div>
+                    <button class="run32" onclick="runTask('32')">▶ 任务 3.2</button>
+                    <button class="run42" onclick="runTask('42')">▶ 任务 4.2</button>
+                </div>
+            </div>
+
+            <div id="llvmStatus" style="font-size:11px;color:#888;margin-top:-8px;">检测 LLVM 工具链中...</div>
+            <div id="results"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+var currentTask = '32';
+var currentFuncTable = '';
+
+function loadTest(el) {
+    currentTask = el.dataset.task;
+    var listId = currentTask === '42' ? '#test42List' : '#test32List';
+    document.querySelectorAll(listId + ' li').forEach(function(l) { l.classList.remove('active'); });
+    el.classList.add('active');
+
+    var code = el.dataset.code.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"');
+    var lines = code.split('\n');
+    var outLines = [];
+    var inputs = '';
+    var section = 'title';
+    currentFuncTable = '';
+
+    for (var i = 0; i < lines.length; i++) {
+        var s = lines[i].trim();
+        if (s.startsWith('=== 输入:')) {
+            section = 'input';
+            inputs = s.replace('=== 输入:', '').replace(/===/g, '').trim();
+            if (inputs === '(无)') inputs = '';
+        } else if (s.startsWith('=== 函数表:')) {
+            section = 'func';
+            currentFuncTable = s.replace('=== 函数表:', '').replace(/===/g, '').trim();
+        } else if (s.startsWith('=== 预期')) {
+            section = 'skip';
+        } else if (s.startsWith('===') && section === 'title') {
+            // Title line - switch to content mode
+            section = currentTask === '42' ? 'quads' : 'src';
+        } else if (s.startsWith('===')) {
+            section = 'skip';
+        } else if (section === 'quads' || section === 'src' || section === 'title') {
+            if (section === 'title') section = currentTask === '42' ? 'quads' : 'src';
+            outLines.push(lines[i]);
+        } else if (section === 'func') {
+            currentFuncTable += ' ' + s;
+        }
+    }
+
+    document.getElementById('code').value = outLines.join('\n');
+    document.getElementById('inputs').value = inputs;
+    document.getElementById('inputLabel').textContent = currentTask === '42' ? '四元式 (Quadruples)' : '源代码 (Source Code)';
+}
+
+function runTask(task) {
+    var code = document.getElementById('code').value;
+    var inputs = document.getElementById('inputs').value;
+    var container = document.getElementById('results');
+
+    var body = new URLSearchParams({code: code, inputs: inputs});
+    if (task === '42' && currentFuncTable) {
+        body.append('func_table', currentFuncTable);
+    }
+    var url = task === '32' ? '/run32' : '/run42';
+
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:#888;">⏳ 运行中...</div>';
+
+    fetch(url, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: body})
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderResults(data, task); })
+        .catch(function(err) { container.innerHTML = '<div class="error">网络错误: ' + err.message + '</div>'; });
+}
+
+function renderResults(data, task) {
+    var container = document.getElementById('results');
+    if (data.error) {
+        container.innerHTML = '<div class="card"><div class="error"><b>错误:</b> ' + escapeHtml(data.error) + '</div></div>';
+        return;
+    }
+
+    if (task === '32') {
+        container.innerHTML = buildTask32View(data);
+    } else {
+        container.innerHTML = buildTask42View(data);
+    }
+    bindTabs();
+}
+
+function buildTask32View(d) {
+    return '<div class="card">' +
+        '<h2>📋 任务 3.2 中间代码</h2>' +
+        '<p style="font-size:11px;color:#888;">解释器输出: <span class="output-badge">' + escapeHtml(d.output) + '</span> 返回值: <b>' + (d.retval ?? '') + '</b></p>' +
+        '<div class="tab-buttons">' +
+            '<button class="tab-btn active" data-tab="tokens">Token序列</button>' +
+            '<button class="tab-btn" data-tab="ast">AST</button>' +
+            '<button class="tab-btn" data-tab="sym">符号表</button>' +
+            '<button class="tab-btn" data-tab="quads">四元式</button>' +
+            '<button class="tab-btn" data-tab="output">输出</button>' +
+        '</div>' +
+        '<div class="tab-content active" data-tab="tokens"><pre>' + escapeHtml(d.tokens) + '</pre></div>' +
+        '<div class="tab-content" data-tab="ast"><pre>' + escapeHtml(d.ast) + '</pre></div>' +
+        '<div class="tab-content" data-tab="sym"><pre>' + escapeHtml(d.symbol_table) + '</pre></div>' +
+        '<div class="tab-content" data-tab="quads"><pre>' + escapeHtml(d.quadruples) + '</pre></div>' +
+        '<div class="tab-content" data-tab="output"><pre>' + escapeHtml(d.output) + '</pre></div>' +
+    '</div>';
+}
+
+function buildTask42View(d) {
+    var match = d.match;
+    var matchClass = match ? 'match-ok' : 'match-fail';
+    var matchText = match ? '✅ 一致' : '❌ 不一致';
+
+    return '<div>' +
+        // Comparison table
+        '<div class="card" style="margin-bottom:10px;">' +
+            '<h2>⚡ 任务 4.2 四元式 → LLVM 对比结果</h2>' +
+            '<table class="compare-table">' +
+                '<tr><td style="width:120px;">指标</td><td>四元式解释器</td><td>LLVM编译执行</td><td>对比</td></tr>' +
+                '<tr><td>输出</td><td><pre style="margin:0;">' + escapeHtml(d.interp_output) + '</pre></td><td><pre style="margin:0;">' + escapeHtml(d.llvm_output) + '</pre></td><td>' + (d.interp_output === d.llvm_output ? '✅' : '❌') + '</td></tr>' +
+                '<tr><td>返回值</td><td>' + d.interp_retval + '</td><td>' + d.llvm_retcode + '</td><td>' + (d.interp_retval === d.llvm_retcode ? '✅' : '❌') + '</td></tr>' +
+                '<tr><td>编译方式</td><td colspan="2">' + (d.llvm_method || 'none') + '</td><td></td></tr>' +
+            '</table>' +
+            '<p class="' + matchClass + '" style="margin:10px 0 0 0;">' + matchText + '</p>' +
+        '</div>' +
+        // LLVM IR and output
+        '<div class="card">' +
+            '<div class="tab-buttons">' +
+                '<button class="tab-btn active" data-tab="llvm">LLVM IR</button>' +
+                '<button class="tab-btn" data-tab="llvmout">LLVM编译输出</button>' +
+            '</div>' +
+            '<div class="tab-content active" data-tab="llvm"><pre>' + escapeHtml(d.llvm_ir) + '</pre></div>' +
+            '<div class="tab-content" data-tab="llvmout"><pre>' + escapeHtml(d.llvm_output) + '</pre></div>' +
+        '</div>' +
+    '</div>';
+}
+
+function bindTabs() {
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var parent = this.closest('.card');
+            if (!parent) return;
+            parent.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            parent.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+            var target = parent.querySelector('.tab-content[data-tab="' + this.dataset.tab + '"]');
+            if (target) target.classList.add('active');
+        };
+    });
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return (str+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    var first32 = document.querySelector('#test32List li');
+    if (first32) first32.click();
+    checkLLVM();
+});
+
+function checkLLVM() {
+    fetch('/llvm_status')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            var el = document.getElementById('llvmStatus');
+            var ok = (data.clang && data.clang !== '未找到') || (data.lli && data.lli !== '未找到');
+            if (ok) {
+                el.innerHTML = '✅ LLVM: ' + [data.clang, data.lli].filter(function(x){return x && x!=='未找到'}).join(', ');
+                el.style.color = '#35ff6b';
+            } else {
+                el.innerHTML = '⚠️ 未检测到LLVM。安装: sudo apt install llvm clang';
+                el.style.color = '#ff9a56';
+            }
+        });
+}
+</script>
+</body>
+</html>

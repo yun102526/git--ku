@@ -1,0 +1,105 @@
+--- 成功加载外部源文件: 测试用例/3.2/test1.1-2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test1.1-2.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+a	700	2
+=	219	2
+1	400	2
+;	303	2
+main	700	4
+(	201	4
+)	202	4
+{	301	4
+int	102	6
+result	700	6
+;	303	6
+int	102	7
+N	700	7
+=	219	7
+read	112	7
+(	201	7
+)	202	7
+;	303	7
+int	102	8
+M	700	8
+=	219	8
+read	112	8
+(	201	8
+)	202	8
+;	303	8
+if	103	10
+(	201	10
+M	700	10
+>=	222	10
+N	700	10
+)	202	10
+result	700	10
+=	219	10
+M	700	10
+;	303	10
+else	104	11
+result	700	11
+=	219	11
+N	700	11
+;	303	11
+a	700	12
+=	219	12
+result	700	12
++	211	12
+100	400	12
+;	303	12
+write	700	13
+(	201	13
+a	700	13
+)	202	13
+;	303	13
+}	302	15
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  VarDecl(int a)[2]
+    Init
+      Literal(1)[2]
+  FunctionDef(int main)[4]
+    Compound
+      VarDecl(int result)[6]
+      VarDecl(int N)[7]
+        Init
+          CallExpr(read)[7]
+      VarDecl(int M)[8]
+        Init
+          CallExpr(read)[8]
+      IfStmt
+        BinaryExpr(>=)[10]
+          Identifier(M)[10]
+          Identifier(N)[10]
+        Compound
+          ExprStmt
+            AssignExpr[10]
+              Identifier(result)[10]
+              Identifier(M)[10]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[11]
+              Identifier(result)[11]
+              Identifier(N)[11]
+      ExprStmt
+        AssignExpr[12]
+          Identifier(a)[12]
+          BinaryExpr(+)[12]
+            Identifier(result)[12]
+            Literal(100)[12]
+      ExprStmt
+        CallExpr(write)[13]
+          Identifier(a)[13]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+a: (a, var, int)
+main: (main, function, int, params=[])
+result: (result, var, int)
+N: (N, var, int)
+M: (M, var, int)

@@ -1,0 +1,135 @@
+--- 成功加载外部源文件: 测试用例/3.2/test4.1-2.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test4.1-2.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+seq	700	2
+(	201	2
+int	102	2
+)	202	2
+;	303	2
+main	700	3
+(	201	3
+)	202	3
+{	301	4
+int	102	5
+n	700	5
+;	303	5
+n	700	6
+=	219	6
+read	112	6
+(	201	6
+)	202	6
+;	303	6
+write	700	7
+(	201	7
+seq	700	7
+(	201	7
+n	700	7
+)	202	7
+)	202	7
+;	303	7
+}	302	8
+int	102	10
+seq	700	10
+(	201	10
+int	102	10
+m	700	10
+)	202	10
+{	301	10
+int	102	11
+i	700	11
+,	304	11
+fa	700	11
+;	303	11
+i	700	12
+=	219	12
+0	400	12
+;	303	12
+if	103	13
+(	201	13
+m	700	13
+<=	221	13
+1	400	13
+)	202	13
+{	301	14
+fa	700	15
+=	219	15
+1	400	15
+;	303	15
+}	302	16
+else	104	17
+{	301	17
+fa	700	18
+=	219	18
+m	700	18
++	211	18
+seq	700	18
+(	201	18
+m	700	18
+-	212	18
+1	400	18
+)	202	18
+;	303	18
+}	302	19
+return	106	20
+fa	700	20
+;	303	20
+}	302	21
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int seq)[2]
+    Param(int _p0)[2]
+  FunctionDef(int main)[3]
+    Compound
+      VarDecl(int n)[5]
+      ExprStmt
+        AssignExpr[6]
+          Identifier(n)[6]
+          CallExpr(read)[6]
+      ExprStmt
+        CallExpr(write)[7]
+          CallExpr(seq)[7]
+            Identifier(n)[7]
+  FunctionDef(int seq)[10]
+    Param(int m)[10]
+    Compound
+      VarDecl(int i)[11]
+      VarDecl(int fa)[11]
+      ExprStmt
+        AssignExpr[12]
+          Identifier(i)[12]
+          Literal(0)[12]
+      IfStmt
+        BinaryExpr(<=)[13]
+          Identifier(m)[13]
+          Literal(1)[13]
+        Compound
+          ExprStmt
+            AssignExpr[15]
+              Identifier(fa)[15]
+              Literal(1)[15]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[18]
+              Identifier(fa)[18]
+              BinaryExpr(+)[18]
+                Identifier(m)[18]
+                CallExpr(seq)[18]
+                  BinaryExpr(-)[18]
+                    Identifier(m)[18]
+                    Literal(1)[18]
+      ReturnStmt
+        Identifier(fa)[20]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+seq: (seq, function, int, params=['m'])
+main: (main, function, int, params=[])
+n: (n, var, int)
+m: (m, param, int)
+i: (i, var, int)
+fa: (fa, var, int)

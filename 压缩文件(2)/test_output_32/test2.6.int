@@ -1,0 +1,164 @@
+--- 成功加载外部源文件: 测试用例/3.2/test2.6.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test2.6.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+int	102	2
+read	112	2
+(	201	2
+)	202	2
+;	303	2
+void	107	3
+write	700	3
+(	201	3
+int	102	3
+)	202	3
+;	303	3
+main	700	4
+(	201	4
+)	202	4
+{	301	5
+int	102	6
+a	700	6
+;	303	6
+while	105	7
+(	201	7
+1	400	7
+)	202	7
+{	301	8
+write	700	9
+(	201	9
+"请输入选择(1:break,2:continue,3:exit):\n"	500	9
+)	202	9
+;	303	9
+a	700	10
+=	219	10
+read	112	10
+(	201	10
+)	202	10
+;	303	10
+if	103	11
+(	201	11
+a	700	11
+==	223	11
+1	400	11
+||	218	11
+a	700	11
+==	223	11
+2	400	11
+)	202	11
+{	301	12
+do	109	13
+{	301	14
+write	700	15
+(	201	15
+"循环内\n"	500	15
+)	202	15
+;	303	15
+if	103	16
+(	201	16
+a	700	16
+==	223	16
+1	400	16
+)	202	16
+break	111	17
+;	303	17
+if	103	18
+(	201	18
+a	700	18
+==	223	18
+2	400	18
+)	202	18
+{	301	19
+a	700	20
+=	219	20
+a	700	20
+-	212	20
+1	400	20
+;	303	20
+continue	110	21
+;	303	21
+}	302	22
+}	302	23
+while	105	23
+(	201	23
+1	400	23
+)	202	23
+;	303	23
+write	700	24
+(	201	24
+"循环外\n"	500	24
+)	202	24
+;	303	24
+}	302	25
+else	104	26
+break	111	27
+;	303	27
+}	302	28
+}	302	29
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDecl(int read)[2]
+  FunctionDecl(void write)[3]
+    Param(int _p0)[3]
+  FunctionDef(int main)[4]
+    Compound
+      VarDecl(int a)[6]
+      WhileStmt
+        Literal(1)[7]
+        Compound
+          ExprStmt
+            CallExpr(write)[9]
+              Literal(27126)[9]
+          ExprStmt
+            AssignExpr[10]
+              Identifier(a)[10]
+              CallExpr(read)[10]
+          IfStmt
+            BinaryExpr(||)[11]
+              BinaryExpr(==)[11]
+                Identifier(a)[11]
+                Literal(1)[11]
+              BinaryExpr(==)[11]
+                Identifier(a)[11]
+                Literal(2)[11]
+            Compound
+              DoWhileStmt
+                Compound
+                  ExprStmt
+                    CallExpr(write)[15]
+                      Literal(9640)[15]
+                  IfStmt
+                    BinaryExpr(==)[16]
+                      Identifier(a)[16]
+                      Literal(1)[16]
+                    Compound
+                      BreakStmt[17]
+                  IfStmt
+                    BinaryExpr(==)[18]
+                      Identifier(a)[18]
+                      Literal(2)[18]
+                    Compound
+                      ExprStmt
+                        AssignExpr[20]
+                          Identifier(a)[20]
+                          BinaryExpr(-)[20]
+                            Identifier(a)[20]
+                            Literal(1)[20]
+                      ContinueStmt[21]
+                Condition
+                  Literal(1)[23]
+              ExprStmt
+                CallExpr(write)[24]
+                  Literal(11577)[24]
+          ElseStmt
+            Compound
+              BreakStmt[27]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+read: (read, function, int, params=[])
+write: (write, function, void, params=['_p0'])
+main: (main, function, int, params=[])
+a: (a, var, int)

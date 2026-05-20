@@ -1,0 +1,70 @@
+--- 成功加载外部源文件: 测试用例/3.2/test1.1-1.txt ---
+--- [3.2测试运行] 已进入测试执行流程 ---
+测试文件: test1.1-1.txt
+
+--- [编译前端] Token序列 (Tokens) ---
+===== Token 序列 =====
+main	700	2
+(	201	2
+)	202	2
+{	301	2
+int	102	3
+x	700	3
+=	219	3
+-	212	3
+1	400	3
+;	303	3
+if	103	4
+(	201	4
+x	700	4
+>=	222	4
+0	400	4
+)	202	4
+x	700	5
+=	219	5
+x	700	5
+;	303	5
+else	104	6
+x	700	7
+=	219	7
+-	212	7
+x	700	7
+;	303	7
+write	700	8
+(	201	8
+x	700	8
+)	202	8
+;	303	8
+}	302	9
+
+--- [编译前端] 抽象语法树 (AST) ---
+Program
+  FunctionDef(int main)[2]
+    Compound
+      VarDecl(int x)[3]
+        Init
+          UnaryExpr(-)[3]
+            Literal(1)[3]
+      IfStmt
+        BinaryExpr(>=)[4]
+          Identifier(x)[4]
+          Literal(0)[4]
+        Compound
+          ExprStmt
+            AssignExpr[5]
+              Identifier(x)[5]
+              Identifier(x)[5]
+      ElseStmt
+        Compound
+          ExprStmt
+            AssignExpr[7]
+              Identifier(x)[7]
+              UnaryExpr(-)[7]
+                Identifier(x)[7]
+      ExprStmt
+        CallExpr(write)[8]
+          Identifier(x)[8]
+
+--- [编译前端] 符号表 (Symbol Table) ---
+main: (main, function, int, params=[])
+x: (x, var, int)
