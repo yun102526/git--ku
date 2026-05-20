@@ -4,90 +4,90 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-main	700	2
-(	201	2
-)	202	2
-{	301	2
-int	102	3
-x	700	3
-,	304	3
-y	700	3
-,	304	3
-z	700	3
-;	303	3
+main	700	3
+(	201	3
+)	202	3
+{	301	3
+int	102	4
 x	700	4
-=	219	4
-9	400	4
+,	304	4
+y	700	4
+,	304	4
+z	700	4
 ;	303	4
-y	700	5
+x	700	5
 =	219	5
-3	400	5
+9	400	5
 ;	303	5
-z	700	6
+y	700	6
 =	219	6
-x	700	6
--	212	6
-y	700	6
-*	213	6
-y	700	6
--	212	6
-x	700	6
-%	215	6
 3	400	6
 ;	303	6
-write	700	7
-(	201	7
+z	700	7
+=	219	7
 x	700	7
-)	202	7
+-	212	7
+y	700	7
+*	213	7
+y	700	7
+-	212	7
+x	700	7
+%	215	7
+3	400	7
 ;	303	7
 write	700	8
 (	201	8
-y	700	8
+x	700	8
 )	202	8
 ;	303	8
 write	700	9
 (	201	9
-z	700	9
+y	700	9
 )	202	9
 ;	303	9
-}	302	10
+write	700	10
+(	201	10
+z	700	10
+)	202	10
+;	303	10
+}	302	11
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(int main)[2]
+  FunctionDef(int main)[3]
     Compound
-      VarDecl(int x)[3]
-      VarDecl(int y)[3]
-      VarDecl(int z)[3]
-      ExprStmt
-        AssignExpr[4]
-          Identifier(x)[4]
-          Literal(9)[4]
+      VarDecl(int x)[4]
+      VarDecl(int y)[4]
+      VarDecl(int z)[4]
       ExprStmt
         AssignExpr[5]
-          Identifier(y)[5]
-          Literal(3)[5]
+          Identifier(x)[5]
+          Literal(9)[5]
       ExprStmt
         AssignExpr[6]
-          Identifier(z)[6]
-          BinaryExpr(-)[6]
-            BinaryExpr(-)[6]
-              Identifier(x)[6]
-              BinaryExpr(*)[6]
-                Identifier(y)[6]
-                Identifier(y)[6]
-            BinaryExpr(%)[6]
-              Identifier(x)[6]
-              Literal(3)[6]
+          Identifier(y)[6]
+          Literal(3)[6]
       ExprStmt
-        CallExpr(write)[7]
-          Identifier(x)[7]
+        AssignExpr[7]
+          Identifier(z)[7]
+          BinaryExpr(-)[7]
+            BinaryExpr(-)[7]
+              Identifier(x)[7]
+              BinaryExpr(*)[7]
+                Identifier(y)[7]
+                Identifier(y)[7]
+            BinaryExpr(%)[7]
+              Identifier(x)[7]
+              Literal(3)[7]
       ExprStmt
         CallExpr(write)[8]
-          Identifier(y)[8]
+          Identifier(x)[8]
       ExprStmt
         CallExpr(write)[9]
-          Identifier(z)[9]
+          Identifier(y)[9]
+      ExprStmt
+        CallExpr(write)[10]
+          Identifier(z)[10]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, int, params=[])

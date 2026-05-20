@@ -4,94 +4,94 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-main	700	2
-(	201	2
-)	202	2
-{	301	4
-int	102	5
-i	700	5
-,	304	5
-N	700	5
-,	304	5
-sum	700	5
-=	219	5
-0	400	5
-;	303	5
-N	700	6
-=	219	6
-read	112	6
-(	201	6
-)	202	6
-;	303	6
-for	108	7
-(	201	7
+main	700	4
+(	201	4
+)	202	4
+{	301	6
+int	102	7
 i	700	7
-=	219	7
-1	400	7
-;	303	7
-i	700	7
-<=	221	7
+,	304	7
 N	700	7
-;	303	7
-i	700	7
+,	304	7
+sum	700	7
 =	219	7
-i	700	7
-+	211	7
-1	400	7
-)	202	7
-{	301	8
-sum	700	10
-=	219	10
-sum	700	10
-+	211	10
-i	700	10
-;	303	10
-}	302	11
-write	700	13
-(	201	13
-sum	700	13
-)	202	13
-;	303	13
-}	302	15
+0	400	7
+;	303	7
+N	700	8
+=	219	8
+read	112	8
+(	201	8
+)	202	8
+;	303	8
+for	108	9
+(	201	9
+i	700	9
+=	219	9
+1	400	9
+;	303	9
+i	700	9
+<=	221	9
+N	700	9
+;	303	9
+i	700	9
+=	219	9
+i	700	9
++	211	9
+1	400	9
+)	202	9
+{	301	10
+sum	700	12
+=	219	12
+sum	700	12
++	211	12
+i	700	12
+;	303	12
+}	302	13
+write	700	15
+(	201	15
+sum	700	15
+)	202	15
+;	303	15
+}	302	17
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(int main)[2]
+  FunctionDef(int main)[4]
     Compound
-      VarDecl(int i)[5]
-      VarDecl(int N)[5]
-      VarDecl(int sum)[5]
+      VarDecl(int i)[7]
+      VarDecl(int N)[7]
+      VarDecl(int sum)[7]
         Init
-          Literal(0)[5]
+          Literal(0)[7]
       ExprStmt
-        AssignExpr[6]
-          Identifier(N)[6]
-          CallExpr(read)[6]
+        AssignExpr[8]
+          Identifier(N)[8]
+          CallExpr(read)[8]
       ForStmt
         Init
-          AssignExpr[7]
-            Identifier(i)[7]
-            Literal(1)[7]
+          AssignExpr[9]
+            Identifier(i)[9]
+            Literal(1)[9]
         Condition
-          BinaryExpr(<=)[7]
-            Identifier(i)[7]
-            Identifier(N)[7]
+          BinaryExpr(<=)[9]
+            Identifier(i)[9]
+            Identifier(N)[9]
         Step
-          AssignExpr[7]
-            Identifier(i)[7]
-            BinaryExpr(+)[7]
-              Identifier(i)[7]
-              Literal(1)[7]
+          AssignExpr[9]
+            Identifier(i)[9]
+            BinaryExpr(+)[9]
+              Identifier(i)[9]
+              Literal(1)[9]
         Compound
           ExprStmt
-            AssignExpr[10]
-              Identifier(sum)[10]
-              BinaryExpr(+)[10]
-                Identifier(sum)[10]
-                Identifier(i)[10]
+            AssignExpr[12]
+              Identifier(sum)[12]
+              BinaryExpr(+)[12]
+                Identifier(sum)[12]
+                Identifier(i)[12]
       ExprStmt
-        CallExpr(write)[13]
-          Identifier(sum)[13]
+        CallExpr(write)[15]
+          Identifier(sum)[15]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, int, params=[])

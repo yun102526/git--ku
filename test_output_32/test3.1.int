@@ -4,34 +4,34 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-void	107	2
-f	700	2
-(	201	2
-)	202	2
-;	303	2
-main	700	4
-(	201	4
-)	202	4
-{	301	4
-f	700	5
+void	107	3
+f	700	3
+(	201	3
+)	202	3
+;	303	3
+main	700	5
 (	201	5
 )	202	5
-;	303	5
-}	302	6
-f	700	8
-(	201	8
-)	202	8
-{	301	8
-}	302	8
+{	301	5
+f	700	6
+(	201	6
+)	202	6
+;	303	6
+}	302	7
+f	700	9
+(	201	9
+)	202	9
+{	301	9
+}	302	9
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(void f)[2]
-  FunctionDef(int main)[4]
+  FunctionDecl(void f)[3]
+  FunctionDef(int main)[5]
     Compound
       ExprStmt
-        CallExpr(f)[5]
-  FunctionDef(int f)[8]
+        CallExpr(f)[6]
+  FunctionDef(int f)[9]
     Compound
 
 --- [编译前端] 符号表 (Symbol Table) ---

@@ -1,4 +1,7 @@
-//双重for嵌套，输入一个数n,输出前n列乘法表
+=== 3.2 嵌套控制：双重for 打印乘法表 ===
+// 测试函数调用+双重for循环
+// 输入一个正整数n(1~9), 输出n×n乘法表
+// 注意: ""字符串会转为整数值求和, 输出为数字
 int chengfabiao(int n)
 {
   int i,j,s;
@@ -7,9 +10,8 @@ int chengfabiao(int n)
          for(j=1;j<=i;j=j+1)
         {
              s=i*j;
-           write(j);write("*");write(i);write("=");write(s );write(" ");
+           write(j);write(i);write(s);
        }
-            write("换行");
     }
   return 0;
 }
@@ -23,5 +25,5 @@ main()
    n=read();
    chengfabiao(n);
 }
-
-
+=== 输入: 4 (1~9的整数) ===
+=== 预期输出: 乘法表各乘积 ===

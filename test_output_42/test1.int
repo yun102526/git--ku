@@ -3,6 +3,8 @@
 测试文件: test1.txt
 
 --- [输入] 四元式流 ---
+// 计算 a=10, b=20, c=b*2+a = 20*2+10 = 50
+// 测试四元式: 赋值(=), 乘法(*), 加法(+), 写(write), 返回(return)
 0: (=, 10, _, a)
 1: (=, 20, _, b)
 2: (*, b, 2, t1)
@@ -14,7 +16,8 @@
 --- [4.2 输出] LLVM IR 代码 ---
 declare i32 @printf(ptr, ...)
 
-@.fmt_num = private constant [4 x i8] c"%d\0A\00"
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
 
 
 define i32 @main() {

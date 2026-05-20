@@ -4,144 +4,144 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	3
-seq	700	3
-(	201	3
-int	102	3
-)	202	3
-;	303	3
-main	700	4
-(	201	4
-)	202	4
-{	301	5
-int	102	6
-n	700	6
-;	303	6
-n	700	7
-=	219	7
-read	112	7
-(	201	7
-)	202	7
-;	303	7
-write	700	8
-(	201	8
-seq	700	8
-(	201	8
+int	102	5
+seq	700	5
+(	201	5
+int	102	5
+)	202	5
+;	303	5
+main	700	6
+(	201	6
+)	202	6
+{	301	7
+int	102	8
 n	700	8
-)	202	8
-)	202	8
 ;	303	8
-}	302	9
-int	102	11
-seq	700	11
-(	201	11
-int	102	11
-m	700	11
-)	202	11
-{	301	12
+n	700	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
+;	303	9
+write	700	10
+(	201	10
+seq	700	10
+(	201	10
+n	700	10
+)	202	10
+)	202	10
+;	303	10
+}	302	11
 int	102	13
-s	700	13
-,	304	13
-a	700	13
-,	304	13
-b	700	13
-;	303	13
-if	103	14
-(	201	14
-m	700	14
-<=	221	14
-2	400	14
-)	202	14
+seq	700	13
+(	201	13
+int	102	13
+m	700	13
+)	202	13
+{	301	14
+int	102	15
 s	700	15
-=	219	15
-1	400	15
+,	304	15
+a	700	15
+,	304	15
+b	700	15
 ;	303	15
-else	104	16
-{	301	16
-a	700	17
+if	103	16
+(	201	16
+m	700	16
+<=	221	16
+2	400	16
+)	202	16
+s	700	17
 =	219	17
-seq	700	17
-(	201	17
-m	700	17
--	212	17
 1	400	17
-)	202	17
 ;	303	17
-b	700	18
-=	219	18
-seq	700	18
-(	201	18
-m	700	18
--	212	18
-2	400	18
-)	202	18
-;	303	18
-s	700	19
-=	219	19
+else	104	18
+{	301	18
 a	700	19
-+	211	19
-b	700	19
+=	219	19
+seq	700	19
+(	201	19
+m	700	19
+-	212	19
+1	400	19
+)	202	19
 ;	303	19
-}	302	20
-return	106	21
+b	700	20
+=	219	20
+seq	700	20
+(	201	20
+m	700	20
+-	212	20
+2	400	20
+)	202	20
+;	303	20
 s	700	21
+=	219	21
+a	700	21
++	211	21
+b	700	21
 ;	303	21
-}	302	23
+}	302	22
+return	106	23
+s	700	23
+;	303	23
+}	302	25
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(int seq)[3]
-    Param(int _p0)[3]
-  FunctionDef(int main)[4]
+  FunctionDecl(int seq)[5]
+    Param(int _p0)[5]
+  FunctionDef(int main)[6]
     Compound
-      VarDecl(int n)[6]
+      VarDecl(int n)[8]
       ExprStmt
-        AssignExpr[7]
-          Identifier(n)[7]
-          CallExpr(read)[7]
+        AssignExpr[9]
+          Identifier(n)[9]
+          CallExpr(read)[9]
       ExprStmt
-        CallExpr(write)[8]
-          CallExpr(seq)[8]
-            Identifier(n)[8]
-  FunctionDef(int seq)[11]
-    Param(int m)[11]
+        CallExpr(write)[10]
+          CallExpr(seq)[10]
+            Identifier(n)[10]
+  FunctionDef(int seq)[13]
+    Param(int m)[13]
     Compound
-      VarDecl(int s)[13]
-      VarDecl(int a)[13]
-      VarDecl(int b)[13]
+      VarDecl(int s)[15]
+      VarDecl(int a)[15]
+      VarDecl(int b)[15]
       IfStmt
-        BinaryExpr(<=)[14]
-          Identifier(m)[14]
-          Literal(2)[14]
-        Compound
-          ExprStmt
-            AssignExpr[15]
-              Identifier(s)[15]
-              Literal(1)[15]
-      ElseStmt
+        BinaryExpr(<=)[16]
+          Identifier(m)[16]
+          Literal(2)[16]
         Compound
           ExprStmt
             AssignExpr[17]
-              Identifier(a)[17]
-              CallExpr(seq)[17]
-                BinaryExpr(-)[17]
-                  Identifier(m)[17]
-                  Literal(1)[17]
-          ExprStmt
-            AssignExpr[18]
-              Identifier(b)[18]
-              CallExpr(seq)[18]
-                BinaryExpr(-)[18]
-                  Identifier(m)[18]
-                  Literal(2)[18]
+              Identifier(s)[17]
+              Literal(1)[17]
+      ElseStmt
+        Compound
           ExprStmt
             AssignExpr[19]
-              Identifier(s)[19]
-              BinaryExpr(+)[19]
-                Identifier(a)[19]
-                Identifier(b)[19]
+              Identifier(a)[19]
+              CallExpr(seq)[19]
+                BinaryExpr(-)[19]
+                  Identifier(m)[19]
+                  Literal(1)[19]
+          ExprStmt
+            AssignExpr[20]
+              Identifier(b)[20]
+              CallExpr(seq)[20]
+                BinaryExpr(-)[20]
+                  Identifier(m)[20]
+                  Literal(2)[20]
+          ExprStmt
+            AssignExpr[21]
+              Identifier(s)[21]
+              BinaryExpr(+)[21]
+                Identifier(a)[21]
+                Identifier(b)[21]
       ReturnStmt
-        Identifier(s)[21]
+        Identifier(s)[23]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 seq: (seq, function, int, params=['m'])

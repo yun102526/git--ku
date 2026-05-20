@@ -105,8 +105,9 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
     arr_vars = set()
     for op, a1, a2, res in quads:
         for a in [a1, a2, res]:
-            if a and a != '_' and not a.isdigit() and not a.startswith('t'):
-                all_vars.add(a)
+            if a and a != '_' and not a.isdigit():
+                if not (a.startswith('t') and a[1:].isdigit()):
+                    all_vars.add(a)
     for op, a1, a2, res in quads:
         if op == '[]=':
             arr_vars.add(res)
@@ -146,7 +147,7 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
             return None
         if arg.isdigit() or (arg.startswith('-') and arg[1:].isdigit()):
             return arg
-        if arg.startswith('t'):
+        if arg.startswith('t') and arg[1:].isdigit():
             return f'%{arg}'
         if arg in arr_vars:
             t = new_tmp()
@@ -215,6 +216,10 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
             elif op == 'write':
                 v = get_val(a1, blk)
                 blk.append(f'  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 {v})')
+
+            elif op == 'writec':
+                v = get_val(a1, blk)
+                blk.append(f'  call i32 (ptr, ...) @printf(ptr @.fmt_chr, i32 {v})')
 
             elif op == '=[]':
                 idx = get_val(a2, blk)
@@ -309,7 +314,8 @@ def generate_llvm(quads, func_table, inputs=None):
     mod = []
     mod.append('declare i32 @printf(ptr, ...)')
     mod.append('')
-    mod.append('@.fmt_num = private constant [4 x i8] c"%d\\0A\\00"')
+    mod.append('@.fmt_num = private constant [3 x i8] c"%d\\00"')
+    mod.append('@.fmt_chr = private constant [3 x i8] c"%c\\00"')
     mod.append('')
 
     if inputs:
@@ -448,6 +454,10 @@ class QuadInterpreter:
             self.output.append(str(self.val(a1)))
             return True, None
 
+        elif op == 'writec':
+            self.output.append(chr(self.val(a1)))
+            return True, None
+
         elif op == '=[]':
             arr = self.arrays.get(a1, {})
             self.mem[res] = arr.get(self.val(a2), 0)
@@ -541,7 +551,7 @@ class QuadInterpreter:
             if not cont: break
             if jumped != 'jumped': self.pc += 1
 
-        return '\n'.join(self.output)
+        return ''.join(self.output)
 
 
 # ---- Public API ----

@@ -4,91 +4,91 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	2
-abs	700	2
-(	201	2
-int	102	2
-)	202	2
-;	303	2
-main	700	4
-(	201	4
-)	202	4
-{	301	4
-int	102	5
-x	700	5
-=	219	5
--	212	5
-10	400	5
-,	304	5
-y	700	5
-;	303	5
-y	700	6
-=	219	6
-abs	700	6
-(	201	6
+int	102	3
+abs	700	3
+(	201	3
+int	102	3
+)	202	3
+;	303	3
+main	700	5
+(	201	5
+)	202	5
+{	301	5
+int	102	6
 x	700	6
-)	202	6
+=	219	6
+-	212	6
+10	400	6
+,	304	6
+y	700	6
 ;	303	6
-write	700	7
-(	201	7
 y	700	7
+=	219	7
+abs	700	7
+(	201	7
+x	700	7
 )	202	7
 ;	303	7
-}	302	8
-int	102	10
-abs	700	10
-(	201	10
-int	102	10
-x	700	10
-)	202	10
-{	301	10
-if	103	11
+write	700	8
+(	201	8
+y	700	8
+)	202	8
+;	303	8
+}	302	9
+int	102	11
+abs	700	11
 (	201	11
+int	102	11
 x	700	11
-<=	221	11
-0	400	11
 )	202	11
-return	106	11
--	212	11
-x	700	11
-;	303	11
+{	301	11
+if	103	12
+(	201	12
+x	700	12
+<=	221	12
+0	400	12
+)	202	12
 return	106	12
+-	212	12
 x	700	12
 ;	303	12
-}	302	13
+return	106	13
+x	700	13
+;	303	13
+}	302	14
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(int abs)[2]
-    Param(int _p0)[2]
-  FunctionDef(int main)[4]
+  FunctionDecl(int abs)[3]
+    Param(int _p0)[3]
+  FunctionDef(int main)[5]
     Compound
-      VarDecl(int x)[5]
+      VarDecl(int x)[6]
         Init
-          UnaryExpr(-)[5]
-            Literal(10)[5]
-      VarDecl(int y)[5]
+          UnaryExpr(-)[6]
+            Literal(10)[6]
+      VarDecl(int y)[6]
       ExprStmt
-        AssignExpr[6]
-          Identifier(y)[6]
-          CallExpr(abs)[6]
-            Identifier(x)[6]
-      ExprStmt
-        CallExpr(write)[7]
+        AssignExpr[7]
           Identifier(y)[7]
-  FunctionDef(int abs)[10]
-    Param(int x)[10]
+          CallExpr(abs)[7]
+            Identifier(x)[7]
+      ExprStmt
+        CallExpr(write)[8]
+          Identifier(y)[8]
+  FunctionDef(int abs)[11]
+    Param(int x)[11]
     Compound
       IfStmt
-        BinaryExpr(<=)[11]
-          Identifier(x)[11]
-          Literal(0)[11]
+        BinaryExpr(<=)[12]
+          Identifier(x)[12]
+          Literal(0)[12]
         Compound
           ReturnStmt
-            UnaryExpr(-)[11]
-              Identifier(x)[11]
+            UnaryExpr(-)[12]
+              Identifier(x)[12]
       ReturnStmt
-        Identifier(x)[12]
+        Identifier(x)[13]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 abs: (abs, function, int, params=['x'])

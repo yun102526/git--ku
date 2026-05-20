@@ -4,66 +4,66 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-main	700	2
-(	201	2
-)	202	2
-{	301	2
-int	102	3
-x	700	3
-=	219	3
--	212	3
-1	400	3
-;	303	3
-if	103	4
-(	201	4
+main	700	3
+(	201	3
+)	202	3
+{	301	3
+int	102	4
 x	700	4
->=	222	4
-0	400	4
-)	202	4
+=	219	4
+-	212	4
+1	400	4
+;	303	4
+if	103	5
+(	201	5
 x	700	5
-=	219	5
-x	700	5
-;	303	5
-else	104	6
-x	700	7
-=	219	7
--	212	7
-x	700	7
-;	303	7
-write	700	8
-(	201	8
+>=	222	5
+0	400	5
+)	202	5
+x	700	6
+=	219	6
+x	700	6
+;	303	6
+else	104	7
 x	700	8
-)	202	8
+=	219	8
+-	212	8
+x	700	8
 ;	303	8
-}	302	9
+write	700	9
+(	201	9
+x	700	9
+)	202	9
+;	303	9
+}	302	10
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(int main)[2]
+  FunctionDef(int main)[3]
     Compound
-      VarDecl(int x)[3]
+      VarDecl(int x)[4]
         Init
-          UnaryExpr(-)[3]
-            Literal(1)[3]
+          UnaryExpr(-)[4]
+            Literal(1)[4]
       IfStmt
-        BinaryExpr(>=)[4]
-          Identifier(x)[4]
-          Literal(0)[4]
+        BinaryExpr(>=)[5]
+          Identifier(x)[5]
+          Literal(0)[5]
         Compound
           ExprStmt
-            AssignExpr[5]
-              Identifier(x)[5]
-              Identifier(x)[5]
+            AssignExpr[6]
+              Identifier(x)[6]
+              Identifier(x)[6]
       ElseStmt
         Compound
           ExprStmt
-            AssignExpr[7]
-              Identifier(x)[7]
-              UnaryExpr(-)[7]
-                Identifier(x)[7]
+            AssignExpr[8]
+              Identifier(x)[8]
+              UnaryExpr(-)[8]
+                Identifier(x)[8]
       ExprStmt
-        CallExpr(write)[8]
-          Identifier(x)[8]
+        CallExpr(write)[9]
+          Identifier(x)[9]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, int, params=[])

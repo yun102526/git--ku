@@ -4,116 +4,116 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	4
-factor	700	4
-(	201	4
-int	102	4
-)	202	4
-;	303	4
-main	700	5
+int	102	5
+factor	700	5
 (	201	5
+int	102	5
 )	202	5
-{	301	6
-int	102	7
-n	700	7
-;	303	7
+;	303	5
+main	700	6
+(	201	6
+)	202	6
+{	301	7
+int	102	8
 n	700	8
-=	219	8
-read	112	8
-(	201	8
-)	202	8
 ;	303	8
-write	700	9
-(	201	9
-factor	700	9
-(	201	9
 n	700	9
-)	202	9
+=	219	9
+read	112	9
+(	201	9
 )	202	9
 ;	303	9
-}	302	10
-int	102	12
-factor	700	12
-(	201	12
-int	102	12
-m	700	12
-)	202	12
-{	301	12
+write	700	10
+(	201	10
+factor	700	10
+(	201	10
+n	700	10
+)	202	10
+)	202	10
+;	303	10
+}	302	11
 int	102	13
-fa	700	13
-;	303	13
-if	103	14
-(	201	14
-m	700	14
-<=	221	14
-1	400	14
-)	202	14
-{	301	14
-fa	700	15
-=	219	15
+factor	700	13
+(	201	13
+int	102	13
+m	700	13
+)	202	13
+{	301	13
+int	102	14
+fa	700	14
+;	303	14
+if	103	15
+(	201	15
+m	700	15
+<=	221	15
 1	400	15
-;	303	15
-}	302	16
-else	104	17
-{	301	17
-fa	700	18
-=	219	18
-m	700	18
-*	213	18
-factor	700	18
-(	201	18
-m	700	18
--	212	18
-1	400	18
-)	202	18
-;	303	18
-}	302	19
-return	106	20
-fa	700	20
-;	303	20
-}	302	21
+)	202	15
+{	301	15
+fa	700	16
+=	219	16
+1	400	16
+;	303	16
+}	302	17
+else	104	18
+{	301	18
+fa	700	19
+=	219	19
+m	700	19
+*	213	19
+factor	700	19
+(	201	19
+m	700	19
+-	212	19
+1	400	19
+)	202	19
+;	303	19
+}	302	20
+return	106	21
+fa	700	21
+;	303	21
+}	302	22
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(int factor)[4]
-    Param(int _p0)[4]
-  FunctionDef(int main)[5]
+  FunctionDecl(int factor)[5]
+    Param(int _p0)[5]
+  FunctionDef(int main)[6]
     Compound
-      VarDecl(int n)[7]
+      VarDecl(int n)[8]
       ExprStmt
-        AssignExpr[8]
-          Identifier(n)[8]
-          CallExpr(read)[8]
+        AssignExpr[9]
+          Identifier(n)[9]
+          CallExpr(read)[9]
       ExprStmt
-        CallExpr(write)[9]
-          CallExpr(factor)[9]
-            Identifier(n)[9]
-  FunctionDef(int factor)[12]
-    Param(int m)[12]
+        CallExpr(write)[10]
+          CallExpr(factor)[10]
+            Identifier(n)[10]
+  FunctionDef(int factor)[13]
+    Param(int m)[13]
     Compound
-      VarDecl(int fa)[13]
+      VarDecl(int fa)[14]
       IfStmt
-        BinaryExpr(<=)[14]
-          Identifier(m)[14]
-          Literal(1)[14]
+        BinaryExpr(<=)[15]
+          Identifier(m)[15]
+          Literal(1)[15]
         Compound
           ExprStmt
-            AssignExpr[15]
-              Identifier(fa)[15]
-              Literal(1)[15]
+            AssignExpr[16]
+              Identifier(fa)[16]
+              Literal(1)[16]
       ElseStmt
         Compound
           ExprStmt
-            AssignExpr[18]
-              Identifier(fa)[18]
-              BinaryExpr(*)[18]
-                Identifier(m)[18]
-                CallExpr(factor)[18]
-                  BinaryExpr(-)[18]
-                    Identifier(m)[18]
-                    Literal(1)[18]
+            AssignExpr[19]
+              Identifier(fa)[19]
+              BinaryExpr(*)[19]
+                Identifier(m)[19]
+                CallExpr(factor)[19]
+                  BinaryExpr(-)[19]
+                    Identifier(m)[19]
+                    Literal(1)[19]
       ReturnStmt
-        Identifier(fa)[20]
+        Identifier(fa)[21]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 factor: (factor, function, int, params=['m'])

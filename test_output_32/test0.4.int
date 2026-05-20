@@ -4,60 +4,60 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	2
-x	700	2
-=	219	2
-1	400	2
-;	303	2
-main	700	4
-(	201	4
-)	202	4
-{	301	4
-int	102	5
-y	700	5
-=	219	5
-2	400	5
-;	303	5
-write	700	6
-(	201	6
-x	700	6
-)	202	6
+int	102	3
+x	700	3
+=	219	3
+1	400	3
+;	303	3
+main	700	5
+(	201	5
+)	202	5
+{	301	5
+int	102	6
+y	700	6
+=	219	6
+2	400	6
 ;	303	6
+write	700	7
+(	201	7
 x	700	7
-=	219	7
-x	700	7
-+	211	7
-y	700	7
+)	202	7
 ;	303	7
-write	700	8
-(	201	8
 x	700	8
-)	202	8
+=	219	8
+x	700	8
++	211	8
+y	700	8
 ;	303	8
-}	302	9
+write	700	9
+(	201	9
+x	700	9
+)	202	9
+;	303	9
+}	302	10
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  VarDecl(int x)[2]
+  VarDecl(int x)[3]
     Init
-      Literal(1)[2]
-  FunctionDef(int main)[4]
+      Literal(1)[3]
+  FunctionDef(int main)[5]
     Compound
-      VarDecl(int y)[5]
+      VarDecl(int y)[6]
         Init
-          Literal(2)[5]
+          Literal(2)[6]
       ExprStmt
-        CallExpr(write)[6]
-          Identifier(x)[6]
-      ExprStmt
-        AssignExpr[7]
+        CallExpr(write)[7]
           Identifier(x)[7]
-          BinaryExpr(+)[7]
-            Identifier(x)[7]
-            Identifier(y)[7]
       ExprStmt
-        CallExpr(write)[8]
+        AssignExpr[8]
           Identifier(x)[8]
+          BinaryExpr(+)[8]
+            Identifier(x)[8]
+            Identifier(y)[8]
+      ExprStmt
+        CallExpr(write)[9]
+          Identifier(x)[9]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 x: (x, var, int)

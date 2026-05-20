@@ -1,4 +1,10 @@
-// break，continue跳转
+=== 3.2 控制流：break和continue 综合测试 ===
+// 测试while/do-while循环中的break和continue
+// 程序循环提示输入选择:
+//   1: break测试(跳出内层do-while)
+//   2: continue测试(跳过本次迭代)
+//   3: exit(跳出外层while)
+// 建议手动交互输入: 1 回车 3 回车(先测试break再退出)
 int read();
 void write(int);
 main()
@@ -6,13 +12,12 @@ main()
     int a;
     while (1)
     {
-        write("请输入选择(1:break,2:continue,3:exit):\n");
+        write('\n');
         a = read();
         if (a == 1 || a == 2)
         {
             do
             {
-                write("循环内\n");
                 if (a == 1)
                     break;
                 if (a == 2)
@@ -21,46 +26,10 @@ main()
                     continue;
                 }
             } while (1);
-            write("循环外\n");
         }
         else
             break;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+=== 输入: 1, 3 ===
+=== 预期输出: 正常退出循环 ===

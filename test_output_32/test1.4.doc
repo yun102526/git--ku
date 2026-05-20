@@ -11,6 +11,5 @@
 9: (return, 0, _, _)
 
 --- [编译后端] 解释器执行过程 ---
-Program output: 11
-55
+Program output: 1155
 Return value: 0

@@ -3,6 +3,8 @@
 测试文件: test4.txt
 
 --- [输入] 四元式流 ---
+// i从1到10, sum累加i, 结果=1+2+...+10=55
+// 测试四元式: for循环等价于 初始化+条件跳转+循环体+增量+回跳
 0: (=, 0, _, sum)
 1: (=, 1, _, i)
 2: (J>=, i, 11, 8)
@@ -17,7 +19,8 @@
 --- [4.2 输出] LLVM IR 代码 ---
 declare i32 @printf(ptr, ...)
 
-@.fmt_num = private constant [4 x i8] c"%d\0A\00"
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
 
 
 define i32 @main() {

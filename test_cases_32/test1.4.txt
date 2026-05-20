@@ -1,4 +1,6 @@
-//do while语句测试，求1到10的数字之和
+=== 3.2 控制流：do-while循环 求1~10之和 ===
+// 测试do-while循环语句
+// 计算1到10的和=55
 main(){
   int x;
   int sum = 0;
@@ -7,7 +9,9 @@ main(){
  do {
       sum = sum + x;
       x = x + 1;
-     } while (x <= 10)；
+     } while (x <= 10);
   write(x);
   write(sum);
 }
+=== 输入: (无) ===
+=== 预期输出: 11 55 ===

@@ -4,200 +4,160 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-void	107	3
-main	700	3
-(	201	3
-)	202	3
-{	301	4
-int	102	5
-n	700	5
-=	219	5
-0	400	5
-;	303	5
+void	107	4
+main	700	4
+(	201	4
+)	202	4
+{	301	5
 int	102	6
-i	700	6
+n	700	6
 =	219	6
 0	400	6
 ;	303	6
 int	102	7
-j	700	7
+i	700	7
 =	219	7
 0	400	7
 ;	303	7
-n	700	8
+int	102	8
+j	700	8
 =	219	8
-read	112	8
-(	201	8
-)	202	8
+0	400	8
 ;	303	8
-write	700	9
+n	700	9
+=	219	9
+read	112	9
 (	201	9
-'小于'	500	9
 )	202	9
 ;	303	9
-write	700	10
+for	108	10
 (	201	10
-n	700	10
-)	202	10
+i	700	10
+=	219	10
+2	400	10
 ;	303	10
-write	700	11
-(	201	11
-'的素数有：'	500	11
-)	202	11
-;	303	11
-write	700	12
+i	700	10
+<	216	10
+n	700	10
+;	303	10
+i	700	10
+=	219	10
+i	700	10
++	211	10
+1	400	10
+)	202	10
+{	301	11
+for	108	12
 (	201	12
-'\n'	500	12
-)	202	12
+j	700	12
+=	219	12
+2	400	12
 ;	303	12
-for	108	13
-(	201	13
-i	700	13
-=	219	13
-2	400	13
-;	303	13
-i	700	13
-<	216	13
-n	700	13
-;	303	13
-i	700	13
-=	219	13
-i	700	13
-+	211	13
-1	400	13
-)	202	13
-{	301	14
-for	108	15
-(	201	15
-j	700	15
-=	219	15
-2	400	15
+j	700	12
+<	216	12
+i	700	12
+;	303	12
+j	700	12
+=	219	12
+j	700	12
++	211	12
+1	400	12
+)	202	12
+{	301	13
+if	103	14
+(	201	14
+i	700	14
+%	215	14
+j	700	14
+==	223	14
+0	400	14
+)	202	14
+{	301	15
+break	111	15
 ;	303	15
-j	700	15
-<	216	15
-i	700	15
-;	303	15
-j	700	15
-=	219	15
-j	700	15
-+	211	15
-1	400	15
-)	202	15
-{	301	16
+}	302	15
+}	302	16
 if	103	17
 (	201	17
-i	700	17
-%	215	17
 j	700	17
 ==	223	17
-0	400	17
+i	700	17
 )	202	17
 {	301	18
-break	111	18
+write	700	18
+(	201	18
+i	700	18
+)	202	18
 ;	303	18
 }	302	18
 }	302	19
-if	103	20
-(	201	20
-j	700	20
-==	223	20
-i	700	20
-)	202	20
-{	301	21
-write	700	21
-(	201	21
-i	700	21
-)	202	21
-;	303	21
-write	700	21
-(	201	21
-'\n'	500	21
-)	202	21
-;	303	21
-}	302	21
-}	302	22
-}	302	23
+}	302	20
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(void main)[3]
+  FunctionDef(void main)[4]
     Compound
-      VarDecl(int n)[5]
-        Init
-          Literal(0)[5]
-      VarDecl(int i)[6]
+      VarDecl(int n)[6]
         Init
           Literal(0)[6]
-      VarDecl(int j)[7]
+      VarDecl(int i)[7]
         Init
           Literal(0)[7]
+      VarDecl(int j)[8]
+        Init
+          Literal(0)[8]
       ExprStmt
-        AssignExpr[8]
-          Identifier(n)[8]
-          CallExpr(read)[8]
-      ExprStmt
-        CallExpr(write)[9]
-          Literal(157)[9]
-      ExprStmt
-        CallExpr(write)[10]
-          Identifier(n)[10]
-      ExprStmt
-        CallExpr(write)[11]
-          Literal(55)[11]
-      ExprStmt
-        CallExpr(write)[12]
-          Literal(10)[12]
+        AssignExpr[9]
+          Identifier(n)[9]
+          CallExpr(read)[9]
       ForStmt
         Init
-          AssignExpr[13]
-            Identifier(i)[13]
-            Literal(2)[13]
+          AssignExpr[10]
+            Identifier(i)[10]
+            Literal(2)[10]
         Condition
-          BinaryExpr(<)[13]
-            Identifier(i)[13]
-            Identifier(n)[13]
+          BinaryExpr(<)[10]
+            Identifier(i)[10]
+            Identifier(n)[10]
         Step
-          AssignExpr[13]
-            Identifier(i)[13]
-            BinaryExpr(+)[13]
-              Identifier(i)[13]
-              Literal(1)[13]
+          AssignExpr[10]
+            Identifier(i)[10]
+            BinaryExpr(+)[10]
+              Identifier(i)[10]
+              Literal(1)[10]
         Compound
           ForStmt
             Init
-              AssignExpr[15]
-                Identifier(j)[15]
-                Literal(2)[15]
+              AssignExpr[12]
+                Identifier(j)[12]
+                Literal(2)[12]
             Condition
-              BinaryExpr(<)[15]
-                Identifier(j)[15]
-                Identifier(i)[15]
+              BinaryExpr(<)[12]
+                Identifier(j)[12]
+                Identifier(i)[12]
             Step
-              AssignExpr[15]
-                Identifier(j)[15]
-                BinaryExpr(+)[15]
-                  Identifier(j)[15]
-                  Literal(1)[15]
+              AssignExpr[12]
+                Identifier(j)[12]
+                BinaryExpr(+)[12]
+                  Identifier(j)[12]
+                  Literal(1)[12]
             Compound
               IfStmt
-                BinaryExpr(==)[17]
-                  BinaryExpr(%)[17]
-                    Identifier(i)[17]
-                    Identifier(j)[17]
-                  Literal(0)[17]
+                BinaryExpr(==)[14]
+                  BinaryExpr(%)[14]
+                    Identifier(i)[14]
+                    Identifier(j)[14]
+                  Literal(0)[14]
                 Compound
-                  BreakStmt[18]
+                  BreakStmt[15]
           IfStmt
-            BinaryExpr(==)[20]
-              Identifier(j)[20]
-              Identifier(i)[20]
+            BinaryExpr(==)[17]
+              Identifier(j)[17]
+              Identifier(i)[17]
             Compound
               ExprStmt
-                CallExpr(write)[21]
-                  Identifier(i)[21]
-              ExprStmt
-                CallExpr(write)[21]
-                  Literal(10)[21]
+                CallExpr(write)[18]
+                  Identifier(i)[18]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, void, params=[])

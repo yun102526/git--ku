@@ -4,152 +4,152 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	3
-gcd	700	3
-(	201	3
-int	102	3
-,	304	3
-int	102	3
-)	202	3
-;	303	3
-int	102	5
-main	700	5
-(	201	5
-void	107	5
-)	202	5
-{	301	6
-int	102	7
-a	700	7
-;	303	7
+int	102	4
+gcd	700	4
+(	201	4
+int	102	4
+,	304	4
+int	102	4
+)	202	4
+;	303	4
+int	102	6
+main	700	6
+(	201	6
+void	107	6
+)	202	6
+{	301	7
 int	102	8
-b	700	8
+a	700	8
 ;	303	8
 int	102	9
-c	700	9
+b	700	9
 ;	303	9
-input	700	10
-(	201	10
-a	700	10
-)	202	10
+int	102	10
+c	700	10
 ;	303	10
-input	700	11
+read	112	11
 (	201	11
-b	700	11
+a	700	11
 )	202	11
 ;	303	11
-c	700	12
-=	219	12
-gcd	700	12
+read	112	12
 (	201	12
-a	700	12
-,	304	12
 b	700	12
 )	202	12
 ;	303	12
-output	700	13
-(	201	13
 c	700	13
+=	219	13
+gcd	700	13
+(	201	13
+a	700	13
+,	304	13
+b	700	13
 )	202	13
 ;	303	13
-return	106	14
-0	400	14
+write	700	14
+(	201	14
+c	700	14
+)	202	14
 ;	303	14
-}	302	15
-int	102	16
-gcd	700	16
-(	201	16
-int	102	16
-x	700	16
-,	304	16
-int	102	16
-y	700	16
-)	202	16
-{	301	17
-if	103	18
-(	201	18
-y	700	18
-==	223	18
-0	400	18
-)	202	18
-{	301	19
-return	106	20
-x	700	20
-;	303	20
-}	302	21
-else	104	22
-{	301	23
-return	106	24
-gcd	700	24
-(	201	24
-y	700	24
-,	304	24
-x	700	24
--	212	24
-x	700	24
-/	214	24
-y	700	24
-*	213	24
-y	700	24
-)	202	24
-;	303	24
-}	302	25
-return	106	26
-0	400	26
-;	303	26
-}	302	27
+return	106	15
+0	400	15
+;	303	15
+}	302	16
+int	102	17
+gcd	700	17
+(	201	17
+int	102	17
+x	700	17
+,	304	17
+int	102	17
+y	700	17
+)	202	17
+{	301	18
+if	103	19
+(	201	19
+y	700	19
+==	223	19
+0	400	19
+)	202	19
+{	301	20
+return	106	21
+x	700	21
+;	303	21
+}	302	22
+else	104	23
+{	301	24
+return	106	25
+gcd	700	25
+(	201	25
+y	700	25
+,	304	25
+x	700	25
+-	212	25
+x	700	25
+/	214	25
+y	700	25
+*	213	25
+y	700	25
+)	202	25
+;	303	25
+}	302	26
+return	106	27
+0	400	27
+;	303	27
+}	302	28
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(int gcd)[3]
-    Param(int _p0)[3]
-    Param(int _p1)[3]
-  FunctionDef(int main)[5]
+  FunctionDecl(int gcd)[4]
+    Param(int _p0)[4]
+    Param(int _p1)[4]
+  FunctionDef(int main)[6]
     Compound
-      VarDecl(int a)[7]
-      VarDecl(int b)[8]
-      VarDecl(int c)[9]
+      VarDecl(int a)[8]
+      VarDecl(int b)[9]
+      VarDecl(int c)[10]
       ExprStmt
-        CallExpr(input)[10]
-          Identifier(a)[10]
+        CallExpr(read)[11]
+          Identifier(a)[11]
       ExprStmt
-        CallExpr(input)[11]
-          Identifier(b)[11]
+        CallExpr(read)[12]
+          Identifier(b)[12]
       ExprStmt
-        AssignExpr[12]
-          Identifier(c)[12]
-          CallExpr(gcd)[12]
-            Identifier(a)[12]
-            Identifier(b)[12]
-      ExprStmt
-        CallExpr(output)[13]
+        AssignExpr[13]
           Identifier(c)[13]
+          CallExpr(gcd)[13]
+            Identifier(a)[13]
+            Identifier(b)[13]
+      ExprStmt
+        CallExpr(write)[14]
+          Identifier(c)[14]
       ReturnStmt
-        Literal(0)[14]
-  FunctionDef(int gcd)[16]
-    Param(int x)[16]
-    Param(int y)[16]
+        Literal(0)[15]
+  FunctionDef(int gcd)[17]
+    Param(int x)[17]
+    Param(int y)[17]
     Compound
       IfStmt
-        BinaryExpr(==)[18]
-          Identifier(y)[18]
-          Literal(0)[18]
+        BinaryExpr(==)[19]
+          Identifier(y)[19]
+          Literal(0)[19]
         Compound
           ReturnStmt
-            Identifier(x)[20]
+            Identifier(x)[21]
       ElseStmt
         Compound
           ReturnStmt
-            CallExpr(gcd)[24]
-              Identifier(y)[24]
-              BinaryExpr(-)[24]
-                Identifier(x)[24]
-                BinaryExpr(*)[24]
-                  BinaryExpr(/)[24]
-                    Identifier(x)[24]
-                    Identifier(y)[24]
-                  Identifier(y)[24]
+            CallExpr(gcd)[25]
+              Identifier(y)[25]
+              BinaryExpr(-)[25]
+                Identifier(x)[25]
+                BinaryExpr(*)[25]
+                  BinaryExpr(/)[25]
+                    Identifier(x)[25]
+                    Identifier(y)[25]
+                  Identifier(y)[25]
       ReturnStmt
-        Literal(0)[26]
+        Literal(0)[27]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 gcd: (gcd, function, int, params=['x', 'y'])

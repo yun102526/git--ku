@@ -20,25 +20,13 @@
 18: (+, i, 1, t3)
 19: (=, t3, _, i)
 20: (J, _, _, 5)
-21: (write, 134, _, _)
-22: (write, 10, _, _)
-23: (write, max, _, _)
-24: (write, 10, _, _)
-25: (write, min, _, _)
-26: (write, 10, _, _)
-27: (/, sum, 5, t4)
-28: (=, t4, _, sum)
-29: (write, sum, _, _)
-30: (write, 10, _, _)
-31: (return, 0, _, _)
+21: (write, max, _, _)
+22: (write, min, _, _)
+23: (/, sum, 5, t4)
+24: (=, t4, _, sum)
+25: (write, sum, _, _)
+26: (return, 0, _, _)
 
 --- [编译后端] 解释器执行过程 ---
-Program output: 134
-10
-0
-10
-0
-10
-0
-10
+Program output: 1037
 Return value: 0

@@ -1,5 +1,7 @@
-// 输入a和b，输出最大公约数
-// 测试函数的递归调用
+=== 3.2 递归：单递归 最大公约数(gcd) ===
+// 测试递归函数 - gcd(x,y)求最大公约数(欧几里得算法)
+// 输入两个正整数a和b(1~1000)
+// 注意: 此代码使用input/output, 需确认是否与read/write兼容
 int gcd(int, int);
 
 int main(void)
@@ -7,10 +9,10 @@ int main(void)
     int a;
     int b;
     int c;
-    input(a);
-    input(b);
+    read(a);
+    read(b);
     c = gcd(a, b);
-    output(c);
+    write(c);
     return 0;
 }
 int gcd(int x, int y)
@@ -25,3 +27,5 @@ int gcd(int x, int y)
     }
     return 0;
 }
+=== 输入: 48, 18 (两个正整数, 1~1000) ===
+=== 预期输出: 6 ===

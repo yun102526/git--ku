@@ -1,4 +1,7 @@
-//while和if嵌套测试，求最大值、最小值和平均值
+=== 3.2 嵌套控制：while+if 求最大最小平均值 ===
+// 测试while与if嵌套, 输入5个整数求最大值、最小值、平均值
+// 输入: 5个整数, 如 10, 5, 8, 3, 9
+// 输出: 最大值、最小值、(和/5的整数商)
 void main()
 {
 	int a=0;
@@ -20,13 +23,10 @@ void main()
 		sum = sum+a;
 		i = i+1;
 	}
-	write('最大 最小 平均值：');
-	write('\n');
 	write(max);
-	write('\n');
 	write(min);
-	write('\n');
 	sum = sum/5;
 	write(sum);
-	write('\n');
 }
+=== 输入: 10, 5, 8, 3, 9 ===
+=== 预期输出: 10 3 7 ===

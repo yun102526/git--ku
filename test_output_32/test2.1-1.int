@@ -4,123 +4,123 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-main	700	3
-(	201	3
-)	202	3
-{	301	4
-int	102	5
-i	700	5
-,	304	5
-factor	700	5
-,	304	5
-n	700	5
-;	303	5
+main	700	4
+(	201	4
+)	202	4
+{	301	5
+int	102	6
 i	700	6
-=	219	6
-0	400	6
+,	304	6
+factor	700	6
+,	304	6
+n	700	6
 ;	303	6
-n	700	7
+i	700	7
 =	219	7
-read	112	7
-(	201	7
-)	202	7
+0	400	7
 ;	303	7
-if	103	8
-(	201	8
 n	700	8
-<	216	8
-1	400	8
+=	219	8
+read	112	8
+(	201	8
 )	202	8
-{	301	8
-factor	700	9
-=	219	9
-0	400	9
-;	303	9
-}	302	10
-else	104	11
-{	301	11
-factor	700	12
-=	219	12
-1	400	12
-;	303	12
-}	302	13
-while	105	14
-(	201	14
-i	700	14
-<	216	14
-n	700	14
-)	202	14
-{	301	15
-i	700	16
-=	219	16
-i	700	16
-+	211	16
-1	400	16
-;	303	16
-factor	700	17
-=	219	17
-factor	700	17
-*	213	17
+;	303	8
+if	103	9
+(	201	9
+n	700	9
+<	216	9
+1	400	9
+)	202	9
+{	301	9
+factor	700	10
+=	219	10
+0	400	10
+;	303	10
+}	302	11
+else	104	12
+{	301	12
+factor	700	13
+=	219	13
+1	400	13
+;	303	13
+}	302	14
+while	105	15
+(	201	15
+i	700	15
+<	216	15
+n	700	15
+)	202	15
+{	301	16
 i	700	17
+=	219	17
+i	700	17
++	211	17
+1	400	17
 ;	303	17
-}	302	18
-write	700	19
-(	201	19
-factor	700	19
-)	202	19
-;	303	19
-}	302	20
+factor	700	18
+=	219	18
+factor	700	18
+*	213	18
+i	700	18
+;	303	18
+}	302	19
+write	700	20
+(	201	20
+factor	700	20
+)	202	20
+;	303	20
+}	302	21
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(int main)[3]
+  FunctionDef(int main)[4]
     Compound
-      VarDecl(int i)[5]
-      VarDecl(int factor)[5]
-      VarDecl(int n)[5]
-      ExprStmt
-        AssignExpr[6]
-          Identifier(i)[6]
-          Literal(0)[6]
+      VarDecl(int i)[6]
+      VarDecl(int factor)[6]
+      VarDecl(int n)[6]
       ExprStmt
         AssignExpr[7]
-          Identifier(n)[7]
-          CallExpr(read)[7]
-      IfStmt
-        BinaryExpr(<)[8]
+          Identifier(i)[7]
+          Literal(0)[7]
+      ExprStmt
+        AssignExpr[8]
           Identifier(n)[8]
-          Literal(1)[8]
+          CallExpr(read)[8]
+      IfStmt
+        BinaryExpr(<)[9]
+          Identifier(n)[9]
+          Literal(1)[9]
         Compound
           ExprStmt
-            AssignExpr[9]
-              Identifier(factor)[9]
-              Literal(0)[9]
+            AssignExpr[10]
+              Identifier(factor)[10]
+              Literal(0)[10]
       ElseStmt
         Compound
           ExprStmt
-            AssignExpr[12]
-              Identifier(factor)[12]
-              Literal(1)[12]
+            AssignExpr[13]
+              Identifier(factor)[13]
+              Literal(1)[13]
       WhileStmt
-        BinaryExpr(<)[14]
-          Identifier(i)[14]
-          Identifier(n)[14]
+        BinaryExpr(<)[15]
+          Identifier(i)[15]
+          Identifier(n)[15]
         Compound
           ExprStmt
-            AssignExpr[16]
-              Identifier(i)[16]
-              BinaryExpr(+)[16]
-                Identifier(i)[16]
-                Literal(1)[16]
-          ExprStmt
             AssignExpr[17]
-              Identifier(factor)[17]
-              BinaryExpr(*)[17]
-                Identifier(factor)[17]
+              Identifier(i)[17]
+              BinaryExpr(+)[17]
                 Identifier(i)[17]
+                Literal(1)[17]
+          ExprStmt
+            AssignExpr[18]
+              Identifier(factor)[18]
+              BinaryExpr(*)[18]
+                Identifier(factor)[18]
+                Identifier(i)[18]
       ExprStmt
-        CallExpr(write)[19]
-          Identifier(factor)[19]
+        CallExpr(write)[20]
+          Identifier(factor)[20]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, int, params=[])

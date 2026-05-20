@@ -1,9 +1,12 @@
 --- 成功加载: 测试用例/4.2/test7.txt ---
 --- [4.2] 四元式 → LLVM IR → 编译执行 ---
 测试文件: test7.txt
-输入: [10, 20, 30]
 
 --- [输入] 四元式流 ---
+// 输入3个数到数组, 求和输出
+// read读数→[]=存入数组→=[]读取数组→+累加求和
+// 输入: 3个整数, 如 10, 20, 30
+// 预期: 10+20+30=60
 0: (=, 0, _, i)
 1: (=, 0, _, sum)
 2: (J>=, i, 3, 11)
@@ -21,10 +24,9 @@
 --- [4.2 输出] LLVM IR 代码 ---
 declare i32 @printf(ptr, ...)
 
-@.fmt_num = private constant [4 x i8] c"%d\0A\00"
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
 
-@input_data = global [3 x i32] [i32 10, i32 20, i32 30]
-@input_idx = global i32 0
 
 define i32 @main() {
 entry:
@@ -44,11 +46,7 @@ block1:
   br i1 %brc_2, label %block3, label %block2
 
 block2:
-  %ld_3 = load i32, ptr @input_idx
-  %gp_3 = getelementptr [3 x i32], ptr @input_data, i32 0, i32 %ld_3
-  %t1 = load i32, ptr %gp_3
-  %ni_3 = add i32 %ld_3, 1
-  store i32 %ni_3, ptr @input_idx
+  %t1 = add i32 0, 0
   %rt1 = load i32, ptr %i_ptr
   %gp_4 = getelementptr [100 x i32], ptr %arr_ptr, i32 0, i32 %rt1
   store i32 %t1, ptr %gp_4

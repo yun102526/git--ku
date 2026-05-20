@@ -4,192 +4,192 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-int	102	6
-f	700	6
+int	102	5
+f	700	5
+(	201	5
+int	102	5
+)	202	5
+;	303	5
+main	700	6
 (	201	6
-int	102	6
 )	202	6
-;	303	6
-main	700	7
-(	201	7
-)	202	7
-{	301	8
-int	102	9
+{	301	7
+int	102	8
+m	700	8
+;	303	8
 m	700	9
+=	219	9
+read	112	9
+(	201	9
+)	202	9
 ;	303	9
-m	700	10
-=	219	10
-read	112	10
+write	700	10
 (	201	10
+f	700	10
+(	201	10
+m	700	10
+)	202	10
 )	202	10
 ;	303	10
-write	700	11
-(	201	11
-f	700	11
-(	201	11
-m	700	11
-)	202	11
-)	202	11
-;	303	11
-}	302	13
+}	302	12
+int	102	14
+f	700	14
+(	201	14
+int	102	14
+n	700	14
+)	202	14
+{	301	14
 int	102	15
-f	700	15
-(	201	15
-int	102	15
-n	700	15
-)	202	15
-{	301	15
-int	102	16
-a	700	16
-,	304	16
-b	700	16
-,	304	16
-c	700	16
-;	303	16
-if	103	17
-(	201	17
-n	700	17
-==	223	17
+a	700	15
+,	304	15
+b	700	15
+,	304	15
+c	700	15
+;	303	15
+if	103	16
+(	201	16
+n	700	16
+==	223	16
+1	400	16
+)	202	16
+{	301	16
+return	106	17
 1	400	17
-)	202	17
-{	301	17
-return	106	18
-1	400	18
-;	303	18
-}	302	19
-else	104	20
-if	103	20
-(	201	20
-n	700	20
-==	223	20
+;	303	17
+}	302	18
+else	104	19
+if	103	19
+(	201	19
+n	700	19
+==	223	19
+2	400	19
+)	202	19
+{	301	19
+return	106	20
 2	400	20
-)	202	20
-{	301	20
-return	106	21
-2	400	21
-;	303	21
-}	302	22
-else	104	23
-if	103	23
-(	201	23
-n	700	23
-==	223	23
-3	400	23
-)	202	23
-{	301	23
-return	106	24
-4	400	24
-;	303	24
-}	302	25
-a	700	26
+;	303	20
+}	302	21
+else	104	22
+if	103	22
+(	201	22
+n	700	22
+==	223	22
+3	400	22
+)	202	22
+{	301	22
+return	106	23
+4	400	23
+;	303	23
+}	302	24
+a	700	25
+=	219	25
+f	700	25
+(	201	25
+n	700	25
+-	212	25
+1	400	25
+)	202	25
+;	303	25
+b	700	26
 =	219	26
 f	700	26
 (	201	26
 n	700	26
 -	212	26
-1	400	26
+2	400	26
 )	202	26
 ;	303	26
-b	700	27
+c	700	27
 =	219	27
 f	700	27
 (	201	27
 n	700	27
 -	212	27
-2	400	27
+3	400	27
 )	202	27
 ;	303	27
+return	106	28
+a	700	28
++	211	28
+b	700	28
++	211	28
 c	700	28
-=	219	28
-f	700	28
-(	201	28
-n	700	28
--	212	28
-3	400	28
-)	202	28
 ;	303	28
-return	106	29
-a	700	29
-+	211	29
-b	700	29
-+	211	29
-c	700	29
-;	303	29
-}	302	30
+}	302	29
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(int f)[6]
-    Param(int _p0)[6]
-  FunctionDef(int main)[7]
+  FunctionDecl(int f)[5]
+    Param(int _p0)[5]
+  FunctionDef(int main)[6]
     Compound
-      VarDecl(int m)[9]
+      VarDecl(int m)[8]
       ExprStmt
-        AssignExpr[10]
-          Identifier(m)[10]
-          CallExpr(read)[10]
+        AssignExpr[9]
+          Identifier(m)[9]
+          CallExpr(read)[9]
       ExprStmt
-        CallExpr(write)[11]
-          CallExpr(f)[11]
-            Identifier(m)[11]
-  FunctionDef(int f)[15]
-    Param(int n)[15]
+        CallExpr(write)[10]
+          CallExpr(f)[10]
+            Identifier(m)[10]
+  FunctionDef(int f)[14]
+    Param(int n)[14]
     Compound
-      VarDecl(int a)[16]
-      VarDecl(int b)[16]
-      VarDecl(int c)[16]
+      VarDecl(int a)[15]
+      VarDecl(int b)[15]
+      VarDecl(int c)[15]
       IfStmt
-        BinaryExpr(==)[17]
-          Identifier(n)[17]
-          Literal(1)[17]
+        BinaryExpr(==)[16]
+          Identifier(n)[16]
+          Literal(1)[16]
         Compound
           ReturnStmt
-            Literal(1)[18]
+            Literal(1)[17]
       ElseStmt
         Compound
           IfStmt
-            BinaryExpr(==)[20]
-              Identifier(n)[20]
-              Literal(2)[20]
+            BinaryExpr(==)[19]
+              Identifier(n)[19]
+              Literal(2)[19]
             Compound
               ReturnStmt
-                Literal(2)[21]
+                Literal(2)[20]
           ElseStmt
             Compound
               IfStmt
-                BinaryExpr(==)[23]
-                  Identifier(n)[23]
-                  Literal(3)[23]
+                BinaryExpr(==)[22]
+                  Identifier(n)[22]
+                  Literal(3)[22]
                 Compound
                   ReturnStmt
-                    Literal(4)[24]
+                    Literal(4)[23]
+      ExprStmt
+        AssignExpr[25]
+          Identifier(a)[25]
+          CallExpr(f)[25]
+            BinaryExpr(-)[25]
+              Identifier(n)[25]
+              Literal(1)[25]
       ExprStmt
         AssignExpr[26]
-          Identifier(a)[26]
+          Identifier(b)[26]
           CallExpr(f)[26]
             BinaryExpr(-)[26]
               Identifier(n)[26]
-              Literal(1)[26]
+              Literal(2)[26]
       ExprStmt
         AssignExpr[27]
-          Identifier(b)[27]
+          Identifier(c)[27]
           CallExpr(f)[27]
             BinaryExpr(-)[27]
               Identifier(n)[27]
-              Literal(2)[27]
-      ExprStmt
-        AssignExpr[28]
-          Identifier(c)[28]
-          CallExpr(f)[28]
-            BinaryExpr(-)[28]
-              Identifier(n)[28]
-              Literal(3)[28]
+              Literal(3)[27]
       ReturnStmt
-        BinaryExpr(+)[29]
-          BinaryExpr(+)[29]
-            Identifier(a)[29]
-            Identifier(b)[29]
-          Identifier(c)[29]
+        BinaryExpr(+)[28]
+          BinaryExpr(+)[28]
+            Identifier(a)[28]
+            Identifier(b)[28]
+          Identifier(c)[28]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 f: (f, function, int, params=['n'])

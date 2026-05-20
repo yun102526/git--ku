@@ -418,10 +418,11 @@ class Parser:
                 val = ord(inner)
             elif inner.startswith('\\') and len(inner) == 2:
                 ch_map = {'n': '\n', 't': '\t', '0': '\0', '\\': '\\', '\'': '\''}
-                val = ord(ch_map.get(inner[1], inner[1]))
+                ch = ch_map.get(inner[1], inner[1])
+                val = ord(ch)
             else:
                 val = sum(ord(c) for c in inner) % 256
-            return {'type': 'Num', 'value': val, 'line': t.line}
+            return {'type': 'CharVal', 'value': val, 'line': t.line}
         elif t.type in ('ID', 'KEYWORD'):
             self.eat(t.type)
             return {'type': 'Var', 'name': t.value, 'line': t.line}
@@ -574,6 +575,9 @@ class QuadGenerator:
         elif t == 'Num':
             return str(node['value'])
 
+        elif t == 'CharVal':
+            return str(node['value'])
+
         elif t == 'Var':
             return node['name']
 
@@ -599,8 +603,11 @@ class QuadGenerator:
 
         elif t == 'Write':
             for a in node['args']:
-                v = self.gen(a)
-                self.emit('write', v, '_', '_')
+                if a['type'] == 'CharVal':
+                    self.emit('writec', str(a['value']), '_', '_')
+                else:
+                    v = self.gen(a)
+                    self.emit('write', v, '_', '_')
 
         elif t == 'Return':
             if node['expr']:
@@ -794,6 +801,11 @@ class Interpreter:
             self.output.append(str(v))
             return True, None
 
+        elif op == 'writec':
+            v = self.val(a1)
+            self.output.append(chr(v))
+            return True, None
+
         elif op == '=[]':
             arr = self.arrays.get(a1, {})
             idx = self.val(a2)
@@ -907,7 +919,7 @@ class Interpreter:
             if jumped != 'jumped':
                 self.pc += 1
 
-        return '\n'.join(self.output)
+        return ''.join(self.output)
 
 
 def ast_to_str(node, indent=0):
@@ -1028,6 +1040,11 @@ def ast_to_str(node, indent=0):
     elif t == 'PostOp':
         lines.append(f"{prefix}PostExpr({node['op']}){ln_tag(ln)}")
         lines.append(ast_to_str(node['operand'], indent + 1))
+
+    elif t == 'CharVal':
+        ch = chr(node['value'])
+        esc = repr(ch)[1:-1]
+        lines.append(f"{prefix}Literal('{esc}'){ln_tag(ln)}")
 
     elif t == 'Num':
         lines.append(f"{prefix}Literal({node['value']}){ln_tag(ln)}")

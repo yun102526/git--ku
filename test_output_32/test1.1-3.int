@@ -1,92 +1,93 @@
 --- 成功加载外部源文件: 测试用例/3.2/test1.1-3.txt ---
 --- [3.2测试运行] 已进入测试执行流程 ---
 测试文件: test1.1-3.txt
+默认输入: [1, 4]
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-main	700	2
-(	201	2
-)	202	2
-{	301	3
-int	102	4
-m	700	4
-,	304	4
-k	700	4
-,	304	4
-result	700	4
-;	303	4
-result	700	5
-=	219	5
-666	400	5
-;	303	5
+main	700	4
+(	201	4
+)	202	4
+{	301	5
+int	102	6
 m	700	6
-=	219	6
-read	112	6
-(	201	6
-)	202	6
+,	304	6
+k	700	6
+,	304	6
+result	700	6
 ;	303	6
-k	700	7
+result	700	7
 =	219	7
-read	112	7
-(	201	7
-)	202	7
+666	400	7
 ;	303	7
-if	103	8
+m	700	8
+=	219	8
+read	112	8
 (	201	8
-m	700	8
-<	216	8
-k	700	8
-||	218	8
-m	700	8
-!=	224	8
-0	400	8
-&&	217	8
-k	700	8
-==	223	8
-1	400	8
 )	202	8
-write	700	9
+;	303	8
+k	700	9
+=	219	9
+read	112	9
 (	201	9
-result	700	9
 )	202	9
 ;	303	9
-}	302	10
+if	103	10
+(	201	10
+m	700	10
+<	216	10
+k	700	10
+||	218	10
+m	700	10
+!=	224	10
+0	400	10
+&&	217	10
+k	700	10
+==	223	10
+1	400	10
+)	202	10
+write	700	11
+(	201	11
+result	700	11
+)	202	11
+;	303	11
+}	302	12
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(int main)[2]
+  FunctionDef(int main)[4]
     Compound
-      VarDecl(int m)[4]
-      VarDecl(int k)[4]
-      VarDecl(int result)[4]
-      ExprStmt
-        AssignExpr[5]
-          Identifier(result)[5]
-          Literal(666)[5]
-      ExprStmt
-        AssignExpr[6]
-          Identifier(m)[6]
-          CallExpr(read)[6]
+      VarDecl(int m)[6]
+      VarDecl(int k)[6]
+      VarDecl(int result)[6]
       ExprStmt
         AssignExpr[7]
-          Identifier(k)[7]
-          CallExpr(read)[7]
+          Identifier(result)[7]
+          Literal(666)[7]
+      ExprStmt
+        AssignExpr[8]
+          Identifier(m)[8]
+          CallExpr(read)[8]
+      ExprStmt
+        AssignExpr[9]
+          Identifier(k)[9]
+          CallExpr(read)[9]
       IfStmt
-        BinaryExpr(||)[8]
-          BinaryExpr(<)[8]
-            Identifier(m)[8]
-            Identifier(k)[8]
-          BinaryExpr(&&)[8]
-            BinaryExpr(!=)[8]
-              Identifier(m)[8]
-              Literal(0)[8]
-            BinaryExpr(==)[8]
-              Identifier(k)[8]
-              Literal(1)[8]
+        BinaryExpr(||)[10]
+          BinaryExpr(<)[10]
+            Identifier(m)[10]
+            Identifier(k)[10]
+          BinaryExpr(&&)[10]
+            BinaryExpr(!=)[10]
+              Identifier(m)[10]
+              Literal(0)[10]
+            BinaryExpr(==)[10]
+              Identifier(k)[10]
+              Literal(1)[10]
         Compound
           ExprStmt
-            CallExpr(write)[9]
-              Identifier(result)[9]
+            CallExpr(write)[11]
+              Identifier(result)[11]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, int, params=[])

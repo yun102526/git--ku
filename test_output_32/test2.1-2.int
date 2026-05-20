@@ -1,118 +1,109 @@
 --- 成功加载外部源文件: 测试用例/3.2/test2.1-2.txt ---
 --- [3.2测试运行] 已进入测试执行流程 ---
 测试文件: test2.1-2.txt
+默认输入: [10, 5, 8, 3, 9]
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-void	107	2
-main	700	2
-(	201	2
-)	202	2
-{	301	3
-int	102	4
-a	700	4
-=	219	4
-0	400	4
-;	303	4
-int	102	5
-max	700	5
-=	219	5
-0	400	5
-;	303	5
+void	107	4
+main	700	4
+(	201	4
+)	202	4
+{	301	5
 int	102	6
-min	700	6
+a	700	6
 =	219	6
 0	400	6
 ;	303	6
 int	102	7
-sum	700	7
+max	700	7
 =	219	7
 0	400	7
 ;	303	7
 int	102	8
-i	700	8
+min	700	8
 =	219	8
 0	400	8
 ;	303	8
-while	105	9
-(	201	9
-i	700	9
-<	216	9
-5	400	9
-)	202	9
-{	301	10
-a	700	11
-=	219	11
-read	112	11
+int	102	9
+sum	700	9
+=	219	9
+0	400	9
+;	303	9
+int	102	10
+i	700	10
+=	219	10
+0	400	10
+;	303	10
+while	105	11
 (	201	11
+i	700	11
+<	216	11
+5	400	11
 )	202	11
-;	303	11
-if	103	12
-(	201	12
-i	700	12
-==	223	12
-0	400	12
-)	202	12
 {	301	12
-max	700	13
-=	219	13
 a	700	13
+=	219	13
+read	112	13
+(	201	13
+)	202	13
 ;	303	13
-min	700	14
-=	219	14
-a	700	14
-;	303	14
-}	302	14
-else	104	15
-{	301	16
-if	103	17
-(	201	17
-a	700	17
->	220	17
-max	700	17
-)	202	17
-{	301	17
-max	700	17
-=	219	17
-a	700	17
-;	303	17
-}	302	17
-if	103	18
-(	201	18
-a	700	18
-<	216	18
-min	700	18
-)	202	18
+if	103	14
+(	201	14
+i	700	14
+==	223	14
+0	400	14
+)	202	14
+{	301	14
+max	700	15
+=	219	15
+a	700	15
+;	303	15
+min	700	16
+=	219	16
+a	700	16
+;	303	16
+}	302	16
+else	104	17
 {	301	18
-min	700	18
-=	219	18
-a	700	18
-;	303	18
-}	302	18
+if	103	19
+(	201	19
+a	700	19
+>	220	19
+max	700	19
+)	202	19
+{	301	19
+max	700	19
+=	219	19
+a	700	19
+;	303	19
 }	302	19
-sum	700	20
+if	103	20
+(	201	20
+a	700	20
+<	216	20
+min	700	20
+)	202	20
+{	301	20
+min	700	20
 =	219	20
-sum	700	20
-+	211	20
 a	700	20
 ;	303	20
-i	700	21
-=	219	21
-i	700	21
-+	211	21
-1	400	21
-;	303	21
-}	302	22
-write	700	23
-(	201	23
-'最大 最小 平均值：'	500	23
-)	202	23
+}	302	20
+}	302	21
+sum	700	22
+=	219	22
+sum	700	22
++	211	22
+a	700	22
+;	303	22
+i	700	23
+=	219	23
+i	700	23
++	211	23
+1	400	23
 ;	303	23
-write	700	24
-(	201	24
-'\n'	500	24
-)	202	24
-;	303	24
+}	302	24
 write	700	25
 (	201	25
 max	700	25
@@ -120,140 +111,110 @@ max	700	25
 ;	303	25
 write	700	26
 (	201	26
-'\n'	500	26
+min	700	26
 )	202	26
 ;	303	26
-write	700	27
-(	201	27
-min	700	27
-)	202	27
+sum	700	27
+=	219	27
+sum	700	27
+/	214	27
+5	400	27
 ;	303	27
 write	700	28
 (	201	28
-'\n'	500	28
+sum	700	28
 )	202	28
 ;	303	28
-sum	700	29
-=	219	29
-sum	700	29
-/	214	29
-5	400	29
-;	303	29
-write	700	30
-(	201	30
-sum	700	30
-)	202	30
-;	303	30
-write	700	31
-(	201	31
-'\n'	500	31
-)	202	31
-;	303	31
-}	302	32
+}	302	29
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDef(void main)[2]
+  FunctionDef(void main)[4]
     Compound
-      VarDecl(int a)[4]
-        Init
-          Literal(0)[4]
-      VarDecl(int max)[5]
-        Init
-          Literal(0)[5]
-      VarDecl(int min)[6]
+      VarDecl(int a)[6]
         Init
           Literal(0)[6]
-      VarDecl(int sum)[7]
+      VarDecl(int max)[7]
         Init
           Literal(0)[7]
-      VarDecl(int i)[8]
+      VarDecl(int min)[8]
         Init
           Literal(0)[8]
+      VarDecl(int sum)[9]
+        Init
+          Literal(0)[9]
+      VarDecl(int i)[10]
+        Init
+          Literal(0)[10]
       WhileStmt
-        BinaryExpr(<)[9]
-          Identifier(i)[9]
-          Literal(5)[9]
+        BinaryExpr(<)[11]
+          Identifier(i)[11]
+          Literal(5)[11]
         Compound
           ExprStmt
-            AssignExpr[11]
-              Identifier(a)[11]
-              CallExpr(read)[11]
+            AssignExpr[13]
+              Identifier(a)[13]
+              CallExpr(read)[13]
           IfStmt
-            BinaryExpr(==)[12]
-              Identifier(i)[12]
-              Literal(0)[12]
+            BinaryExpr(==)[14]
+              Identifier(i)[14]
+              Literal(0)[14]
             Compound
               ExprStmt
-                AssignExpr[13]
-                  Identifier(max)[13]
-                  Identifier(a)[13]
+                AssignExpr[15]
+                  Identifier(max)[15]
+                  Identifier(a)[15]
               ExprStmt
-                AssignExpr[14]
-                  Identifier(min)[14]
-                  Identifier(a)[14]
+                AssignExpr[16]
+                  Identifier(min)[16]
+                  Identifier(a)[16]
           ElseStmt
             Compound
               IfStmt
-                BinaryExpr(>)[17]
-                  Identifier(a)[17]
-                  Identifier(max)[17]
+                BinaryExpr(>)[19]
+                  Identifier(a)[19]
+                  Identifier(max)[19]
                 Compound
                   ExprStmt
-                    AssignExpr[17]
-                      Identifier(max)[17]
-                      Identifier(a)[17]
+                    AssignExpr[19]
+                      Identifier(max)[19]
+                      Identifier(a)[19]
               IfStmt
-                BinaryExpr(<)[18]
-                  Identifier(a)[18]
-                  Identifier(min)[18]
+                BinaryExpr(<)[20]
+                  Identifier(a)[20]
+                  Identifier(min)[20]
                 Compound
                   ExprStmt
-                    AssignExpr[18]
-                      Identifier(min)[18]
-                      Identifier(a)[18]
+                    AssignExpr[20]
+                      Identifier(min)[20]
+                      Identifier(a)[20]
           ExprStmt
-            AssignExpr[20]
-              Identifier(sum)[20]
-              BinaryExpr(+)[20]
-                Identifier(sum)[20]
-                Identifier(a)[20]
+            AssignExpr[22]
+              Identifier(sum)[22]
+              BinaryExpr(+)[22]
+                Identifier(sum)[22]
+                Identifier(a)[22]
           ExprStmt
-            AssignExpr[21]
-              Identifier(i)[21]
-              BinaryExpr(+)[21]
-                Identifier(i)[21]
-                Literal(1)[21]
-      ExprStmt
-        CallExpr(write)[23]
-          Literal(134)[23]
-      ExprStmt
-        CallExpr(write)[24]
-          Literal(10)[24]
+            AssignExpr[23]
+              Identifier(i)[23]
+              BinaryExpr(+)[23]
+                Identifier(i)[23]
+                Literal(1)[23]
       ExprStmt
         CallExpr(write)[25]
           Identifier(max)[25]
       ExprStmt
         CallExpr(write)[26]
-          Literal(10)[26]
+          Identifier(min)[26]
       ExprStmt
-        CallExpr(write)[27]
-          Identifier(min)[27]
+        AssignExpr[27]
+          Identifier(sum)[27]
+          BinaryExpr(/)[27]
+            Identifier(sum)[27]
+            Literal(5)[27]
       ExprStmt
         CallExpr(write)[28]
-          Literal(10)[28]
-      ExprStmt
-        AssignExpr[29]
-          Identifier(sum)[29]
-          BinaryExpr(/)[29]
-            Identifier(sum)[29]
-            Literal(5)[29]
-      ExprStmt
-        CallExpr(write)[30]
-          Identifier(sum)[30]
-      ExprStmt
-        CallExpr(write)[31]
-          Literal(10)[31]
+          Identifier(sum)[28]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 main: (main, function, void, params=[])

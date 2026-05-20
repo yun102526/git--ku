@@ -4,140 +4,140 @@
 
 --- [编译前端] Token序列 (Tokens) ---
 ===== Token 序列 =====
-void	107	3
-invert	700	3
-(	201	3
-int	102	3
-)	202	3
-;	303	3
-main	700	4
+void	107	4
+invert	700	4
 (	201	4
+int	102	4
 )	202	4
-{	301	5
-int	102	6
-k	700	6
-;	303	6
+;	303	4
+main	700	5
+(	201	5
+)	202	5
+{	301	6
+int	102	7
 k	700	7
-=	219	7
-read	112	7
-(	201	7
-)	202	7
 ;	303	7
-invert	700	8
-(	201	8
 k	700	8
+=	219	8
+read	112	8
+(	201	8
 )	202	8
 ;	303	8
-}	302	9
-void	107	11
-invert	700	11
-(	201	11
-int	102	11
-m	700	11
-)	202	11
-{	301	11
+invert	700	9
+(	201	9
+k	700	9
+)	202	9
+;	303	9
+}	302	10
+void	107	12
+invert	700	12
+(	201	12
 int	102	12
-n	700	12
-;	303	12
-if	103	13
-(	201	13
-m	700	13
->	220	13
-0	400	13
-&&	217	13
-m	700	13
-<	216	13
-10	400	13
-)	202	13
-{	301	14
-write	700	16
-(	201	16
-m	700	16
-)	202	16
-;	303	16
-}	302	17
-else	104	18
-{	301	18
-n	700	19
-=	219	19
-m	700	19
-%	215	19
-10	400	19
-;	303	19
-write	700	20
-(	201	20
+m	700	12
+)	202	12
+{	301	12
+int	102	13
+n	700	13
+;	303	13
+if	103	14
+(	201	14
+m	700	14
+>	220	14
+0	400	14
+&&	217	14
+m	700	14
+<	216	14
+10	400	14
+)	202	14
+{	301	15
+write	700	17
+(	201	17
+m	700	17
+)	202	17
+;	303	17
+}	302	18
+else	104	19
+{	301	19
 n	700	20
-)	202	20
+=	219	20
+m	700	20
+%	215	20
+10	400	20
 ;	303	20
+write	700	21
+(	201	21
 n	700	21
-=	219	21
-m	700	21
-/	214	21
-10	400	21
+)	202	21
 ;	303	21
-invert	700	22
-(	201	22
 n	700	22
-)	202	22
+=	219	22
+m	700	22
+/	214	22
+10	400	22
 ;	303	22
-}	302	23
-return	106	24
-0	400	24
-;	303	24
-}	302	25
+invert	700	23
+(	201	23
+n	700	23
+)	202	23
+;	303	23
+}	302	24
+return	106	25
+0	400	25
+;	303	25
+}	302	26
 
 --- [编译前端] 抽象语法树 (AST) ---
 Program
-  FunctionDecl(void invert)[3]
-    Param(int _p0)[3]
-  FunctionDef(int main)[4]
+  FunctionDecl(void invert)[4]
+    Param(int _p0)[4]
+  FunctionDef(int main)[5]
     Compound
-      VarDecl(int k)[6]
+      VarDecl(int k)[7]
       ExprStmt
-        AssignExpr[7]
-          Identifier(k)[7]
-          CallExpr(read)[7]
-      ExprStmt
-        CallExpr(invert)[8]
+        AssignExpr[8]
           Identifier(k)[8]
-  FunctionDef(void invert)[11]
-    Param(int m)[11]
+          CallExpr(read)[8]
+      ExprStmt
+        CallExpr(invert)[9]
+          Identifier(k)[9]
+  FunctionDef(void invert)[12]
+    Param(int m)[12]
     Compound
-      VarDecl(int n)[12]
+      VarDecl(int n)[13]
       IfStmt
-        BinaryExpr(&&)[13]
-          BinaryExpr(>)[13]
-            Identifier(m)[13]
-            Literal(0)[13]
-          BinaryExpr(<)[13]
-            Identifier(m)[13]
-            Literal(10)[13]
+        BinaryExpr(&&)[14]
+          BinaryExpr(>)[14]
+            Identifier(m)[14]
+            Literal(0)[14]
+          BinaryExpr(<)[14]
+            Identifier(m)[14]
+            Literal(10)[14]
         Compound
           ExprStmt
-            CallExpr(write)[16]
-              Identifier(m)[16]
+            CallExpr(write)[17]
+              Identifier(m)[17]
       ElseStmt
         Compound
           ExprStmt
-            AssignExpr[19]
-              Identifier(n)[19]
-              BinaryExpr(%)[19]
-                Identifier(m)[19]
-                Literal(10)[19]
-          ExprStmt
-            CallExpr(write)[20]
+            AssignExpr[20]
               Identifier(n)[20]
+              BinaryExpr(%)[20]
+                Identifier(m)[20]
+                Literal(10)[20]
           ExprStmt
-            AssignExpr[21]
+            CallExpr(write)[21]
               Identifier(n)[21]
-              BinaryExpr(/)[21]
-                Identifier(m)[21]
-                Literal(10)[21]
           ExprStmt
-            CallExpr(invert)[22]
+            AssignExpr[22]
               Identifier(n)[22]
+              BinaryExpr(/)[22]
+                Identifier(m)[22]
+                Literal(10)[22]
+          ExprStmt
+            CallExpr(invert)[23]
+              Identifier(n)[23]
       ReturnStmt
-        Literal(0)[24]
+        Literal(0)[25]
 
 --- [编译前端] 符号表 (Symbol Table) ---
 invert: (invert, function, void, params=['m'])
