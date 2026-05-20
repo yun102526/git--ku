@@ -1,5 +1,8 @@
---- 源文件: test_42_error.txt ---
---- 四元式 ---
+--- 成功加载: 测试用例/4.2/test_42_error.txt ---
+--- [4.2] 四元式 → LLVM IR → 编译执行 ---
+测试文件: test_42_error.txt
+
+--- [输入] 四元式流 ---
 // 测试错误处理: 第1行的J指令跳转到不存在四元式行99
 // 期望: 解释器应报错或达到步数限制
 0: (=, 10, _, a)
@@ -7,15 +10,27 @@
 2: (write, a, _, _)
 3: (return, a, _, _)
 
---- 错误信息 ---
-99
-Traceback (most recent call last):
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 694, in process_42_from_quads
-    llvm_ir = generate_llvm(quads, func_table, inputs)
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 389, in generate_llvm
-    fn_ll = generate_llvm_for_function(finfo['quads'], name, finfo['params'], inputs, global_input_size)
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 269, in generate_llvm_for_function
-    blk.append(f'  br label %{block_of[target_rel]}')
-                              ~~~~~~~~^^^^^^^^^^^^
-KeyError: 99
+--- [4.2 输出] LLVM IR 代码 ---
+declare i32 @printf(ptr, ...)
+
+@.fmt_num = private constant [3 x i8] c"%d\00"
+@.fmt_chr = private constant [3 x i8] c"%c\00"
+
+
+define i32 @main() {
+entry:
+  %a_ptr = alloca i32
+  br label %block0
+
+block0:
+  store i32 10, ptr %a_ptr
+  br label %block0
+
+block1:
+  %rt0 = load i32, ptr %a_ptr
+  call i32 (ptr, ...) @printf(ptr @.fmt_num, i32 %rt0)
+  %rt1 = load i32, ptr %a_ptr
+  ret i32 %rt1
+
+}
 

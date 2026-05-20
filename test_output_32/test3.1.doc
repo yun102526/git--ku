@@ -1,6 +1,7 @@
 --- [编译中端] 生成的四元式流 (Quadruples) ---
 0: (call, f, 0, t1)
 1: (return, 0, _, _)
+2: (return, 0, _, _)
 
 --- [编译后端] 解释器执行过程 ---
 Program output: 

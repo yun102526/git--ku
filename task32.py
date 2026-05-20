@@ -517,10 +517,11 @@ class QuadGenerator:
                 self.symbols[p['name']] = SymbolEntry(p['name'], 'param', 'int')
             params_list = [p['name'] for p in node['params']]
             self.symbols[node['name']] = SymbolEntry(node['name'], 'function', node['ret'],
-                                                      {'params': params_list})
+                                                       {'params': params_list})
             self.func_table[node['name']] = {'params': params_list, 'entry': self.next_quad}
+            prev_count = len(self.quads)
             self.gen(node['body'])
-            if not self.quads or self.quads[-1][0] != 'return':
+            if len(self.quads) == prev_count or self.quads[-1][0] != 'return':
                 self.emit('return', '0', '_', '_')
 
         elif t == 'VarDecl':
@@ -1138,6 +1139,13 @@ def process_32(code, inputs=None):
 
         quads_str = '\n'.join(f"{i}: ({q[0]}, {q[1]}, {q[2]}, {q[3]})" for i, q in enumerate(gen.quads))
 
+        ft_parts = []
+        for name, info in gen.func_table.items():
+            if info.get('entry') is not None:
+                params_str = ','.join(info.get('params', []))
+                ft_parts.append(f'{name}={info["entry"]},{params_str}' if params_str else f'{name}={info["entry"]}')
+        func_table_info = '=== 函数表: ' + '; '.join(ft_parts) if ft_parts else '=== 函数表: main=0'
+
         interp = Interpreter(gen.quads, gen.func_table, inputs)
         output = interp.run()
         retval = interp.retval
@@ -1148,6 +1156,7 @@ def process_32(code, inputs=None):
             'ast': ast_str,
             'symbol_table': sym_str,
             'quadruples': quads_str,
+            'func_table_info': func_table_info,
             'quads_list': gen.quads,
             'func_table': gen.func_table,
             'output': output,

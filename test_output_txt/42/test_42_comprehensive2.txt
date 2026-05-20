@@ -1,6 +1,7 @@
 --- 成功加载: 测试用例/4.2/test_42_comprehensive2.txt ---
 --- [4.2] 四元式 → LLVM IR → 编译执行 ---
 测试文件: test_42_comprehensive2.txt
+输入: [5]
 
 --- [输入] 四元式流 ---
 // 功能: 输入n, 若n<=0返回0, 若n>8返回-1, 否则计算n!
@@ -38,6 +39,8 @@ declare i32 @printf(ptr, ...)
 @.fmt_num = private constant [3 x i8] c"%d\00"
 @.fmt_chr = private constant [3 x i8] c"%c\00"
 
+@input_data = global [1 x i32] [i32 5]
+@input_idx = global i32 0
 
 define i32 @main() {
 entry:
@@ -47,7 +50,11 @@ entry:
   br label %block0
 
 block0:
-  %t1 = add i32 0, 0
+  %ld_0 = load i32, ptr @input_idx
+  %gp_0 = getelementptr [1 x i32], ptr @input_data, i32 0, i32 %ld_0
+  %t1 = load i32, ptr %gp_0
+  %ni_0 = add i32 %ld_0, 1
+  store i32 %ni_0, ptr @input_idx
   store i32 %t1, ptr %n_ptr
   %rt0 = load i32, ptr %n_ptr
   %brc_2 = icmp sgt i32 %rt0, 0

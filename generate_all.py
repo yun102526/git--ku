@@ -36,7 +36,8 @@ def parse_42_meta(content):
             parts = s.replace('=== 输入:', '').replace('===', '').strip()
             if parts and parts != '(无)':
                 try:
-                    inputs = [int(x.strip()) for x in parts.split(',') if x.strip()]
+                    ss = parts.replace(',', ' ')
+                    inputs = [int(x) for x in ss.split() if x]
                 except ValueError:
                     pass
         elif s.startswith('=== 函数表:'):
@@ -68,7 +69,8 @@ def parse_32_meta(content):
             parts = s.replace('=== 输入:', '').replace('===', '').strip()
             if parts and parts != '(无)':
                 try:
-                    inputs = [int(x.strip()) for x in parts.split(',') if x.strip()]
+                    ss = parts.replace(',', ' ')
+                    inputs = [int(x) for x in ss.split() if x]
                 except ValueError:
                     pass
         elif s.startswith('===') and not in_source:

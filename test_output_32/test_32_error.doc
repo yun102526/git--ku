@@ -1,7 +1,7 @@
 --- 错误信息 ---
 语法错误 第3行: 期望;, 得到<KEYWORD, int, line 3>
 Traceback (most recent call last):
-  File "/home/value/AI/jyz/compiler_web/task32.py", line 1130, in process_32
+  File "/home/value/AI/jyz/compiler_web/task32.py", line 1131, in process_32
     ast = parser.parse()
   File "/home/value/AI/jyz/compiler_web/task32.py", line 93, in parse
     s = self.parse_external_decl()

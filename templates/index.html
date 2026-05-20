@@ -71,8 +71,8 @@
                 <textarea id="code" placeholder="输入源代码或四元式..."></textarea>
                 <div class="input-row">
                     <div class="field">
-                        <label>自定义输入 (逗号分隔, 供 read() 使用)</label>
-                        <input type="text" id="inputs" placeholder="例: 5, 10, 3, 2, 1, 5">
+                        <label>自定义输入 (空格隔开, 供 read() 使用)</label>
+                        <input type="text" id="inputs" placeholder="例: 5 10 3 2 1 (空格隔开)">
                     </div>
                     <button class="run32" onclick="runTask('32')">▶ 任务 3.2</button>
                     <button class="run42" onclick="runTask('42')">▶ 任务 4.2</button>
@@ -159,6 +159,7 @@ function renderResults(data, task) {
 
     if (task === '32') {
         container.innerHTML = buildTask32View(data);
+        window._last32 = data;   // cache for 4.2 cross-run
     } else {
         container.innerHTML = buildTask42View(data);
     }
@@ -169,6 +170,9 @@ function buildTask32View(d) {
     return '<div class="card">' +
         '<h2>📋 任务 3.2 中间代码</h2>' +
         '<p style="font-size:11px;color:#888;">解释器输出: <span class="output-badge">' + escapeHtml(d.output) + '</span> 返回值: <b>' + (d.retval ?? '') + '</b></p>' +
+        '<div style="margin:8px 0;">' +
+            '<button class="run42" onclick="run42from32()">▶ 以本四元式运行 4.2</button>' +
+        '</div>' +
         '<div class="tab-buttons">' +
             '<button class="tab-btn active" data-tab="tokens">Token序列</button>' +
             '<button class="tab-btn" data-tab="ast">AST</button>' +
@@ -179,9 +183,68 @@ function buildTask32View(d) {
         '<div class="tab-content active" data-tab="tokens"><pre>' + escapeHtml(d.tokens) + '</pre></div>' +
         '<div class="tab-content" data-tab="ast"><pre>' + escapeHtml(d.ast) + '</pre></div>' +
         '<div class="tab-content" data-tab="sym"><pre>' + escapeHtml(d.symbol_table) + '</pre></div>' +
-        '<div class="tab-content" data-tab="quads"><pre>' + escapeHtml(d.quadruples) + '</pre></div>' +
+            '<div class="tab-content" data-tab="quads"><pre>' + escapeHtml(d.func_table_info) + '\n\n' + escapeHtml(d.quadruples) + '</pre></div>' +
         '<div class="tab-content" data-tab="output"><pre>' + escapeHtml(d.output) + '</pre></div>' +
     '</div>';
+}
+
+function run42from32() {
+    if (!window._last32) return;
+    var d = window._last32;
+    var inputs = document.getElementById('inputs').value;
+    var quads = d.quadruples;
+    var funcTable = d.func_table_info || '';
+
+    var container = document.getElementById('results');
+    // Remove any previous 4.2 result appended by this button
+    var old42 = document.getElementById('result42from32');
+    if (old42) old42.remove();
+    var oldLoading = document.getElementById('loading42from32');
+    if (oldLoading) oldLoading.remove();
+
+    // Insert loading below current content
+    var loading = document.createElement('div');
+    loading.id = 'loading42from32';
+    loading.style.cssText = 'text-align:center;padding:20px;color:#888;';
+    loading.textContent = '⏳ 正在以四元式运行 4.2 ...';
+    container.appendChild(loading);
+
+    var body = new URLSearchParams({code: quads, inputs: inputs, func_table: funcTable});
+    fetch('/run42', {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: body})
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            loading.remove();
+            var wrapper = document.createElement('div');
+            wrapper.id = 'result42from32';
+            if (data.error) {
+                wrapper.innerHTML = '<div class="card"><div class="error"><b>错误:</b> ' + escapeHtml(data.error) + '</div></div>';
+            } else {
+                wrapper.innerHTML = buildTask42View(data);
+                bindTabsIn(wrapper);
+            }
+            container.appendChild(wrapper);
+        })
+        .catch(function(err) {
+            loading.remove();
+            var errDiv = document.createElement('div');
+            errDiv.className = 'error';
+            errDiv.textContent = '网络错误: ' + err.message;
+            container.appendChild(errDiv);
+        });
+}
+
+function bindTabsIn(parent) {
+    parent.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            var card = this.closest('.card');
+            if (!card) return;
+            card.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            card.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
+            var target = card.querySelector('.tab-content[data-tab="' + this.dataset.tab + '"]');
+            if (target) target.classList.add('active');
+        };
+    });
 }
 
 function buildTask42View(d) {

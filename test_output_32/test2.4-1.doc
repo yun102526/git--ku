@@ -29,5 +29,10 @@
 27: (return, 0, _, _)
 
 --- [编译后端] 解释器执行过程 ---
-Program output: 
+Program output:     * 
+   * * 
+  * * * 
+ * * * * 
+* * * * * 
+
 Return value: 0

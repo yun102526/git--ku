@@ -46,7 +46,7 @@
   ✅ test_32_comprehensive2.txt
   ❌ test_32_error.txt  (语法错误 第3行: 期望;, 得到<KEYWORD, int, line 3>)
 
---- 任务 4.2 测试用例 (12/13 通过) ---
+--- 任务 4.2 测试用例 (13/13 通过) ---
   ✅ test1.txt
   ✅ test10.txt
   ✅ test2.txt
@@ -59,6 +59,6 @@
   ✅ test9.txt
   ✅ test_42_comprehensive1.txt
   ✅ test_42_comprehensive2.txt
-  ❌ test_42_error.txt  (99)
+  ✅ test_42_error.txt
 
-总计: 53/55 通过
+总计: 54/55 通过

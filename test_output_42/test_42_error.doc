@@ -1,14 +1,11 @@
---- 错误信息 ---
-99
-Traceback (most recent call last):
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 694, in process_42_from_quads
-    llvm_ir = generate_llvm(quads, func_table, inputs)
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 389, in generate_llvm
-    fn_ll = generate_llvm_for_function(finfo['quads'], name, finfo['params'], inputs, global_input_size)
-  File "/home/value/AI/jyz/compiler_web/task42.py", line 269, in generate_llvm_for_function
-    blk.append(f'  br label %{block_of[target_rel]}')
-                              ~~~~~~~~^^^^^^^^^^^^
-KeyError: 99
+--- [解释器] 四元式解释器执行结果 ---
+输出: 
+返回值: 0
 
---- 对比结果 ---
-因错误无法对比
+--- [4.2 LLVM] LLVM编译执行结果 ---
+编译方式: none
+输出: 错误: LLVM执行超时 (clang错误: clang编译超时)
+返回值: -1
+
+--- [对比] 四元式解释器 vs LLVM编译执行 ---
+结果: ❌ 不一致

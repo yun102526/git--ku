@@ -28,5 +28,5 @@
 26: (return, a, _, _)
 
 --- [编译后端] 解释器执行过程 ---
-Program output: 1
+Program output: 20
 Return value: 0

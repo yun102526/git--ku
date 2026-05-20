@@ -47,15 +47,34 @@ def build_func_table_from_quads(quads):
     if len(func_names) == 0:
         return {'main': {'params': [], 'entry': 0}}
 
-    # Find function boundaries: after a return, next function starts
-    boundaries = [0]
-    for i, (op, a1, a2, res) in enumerate(quads):
-        if op == 'return' and i + 1 < len(quads):
-            boundaries.append(i + 1)
+    # Find all returns and group consecutive ones
+    return_positions = [i for i, (op, _, _, _) in enumerate(quads) if op == 'return']
+    if not return_positions:
+        return {'main': {'params': [], 'entry': 0}}
 
-    # Collect variable names used in each function to infer params
+    # Group consecutive returns (they belong to the same function's control flow)
+    groups = []
+    current_group = [return_positions[0]]
+    for rp in return_positions[1:]:
+        if rp == current_group[-1] + 1:
+            current_group.append(rp)
+        else:
+            groups.append(current_group)
+            current_group = [rp]
+    groups.append(current_group)
+
+    # Each group's last return marks the end of a function; the next function starts at group[-1]+1
+    boundaries = [0]
+    for g in groups:
+        boundaries.append(g[-1] + 1)
+    boundaries = [b for b in boundaries if b < len(quads)]
+
+    # Assign function names: main is always first, then called functions
     func_names_list = sorted(func_names)
     table = {}
+    max_funcs = len(func_names_list) + 1
+    if len(boundaries) > max_funcs:
+        boundaries = boundaries[:max_funcs]
 
     for idx, start in enumerate(boundaries):
         end = boundaries[idx + 1] if idx + 1 < len(boundaries) else len(quads)
@@ -75,9 +94,7 @@ def build_func_table_from_quads(quads):
                                 used_vars.add(arg)
                                 params.append(arg)
 
-        # Determine function name
         if idx == 0:
-            # First function is always main
             name = 'main'
         elif idx <= len(func_names_list):
             name = func_names_list[idx - 1]
@@ -87,13 +104,14 @@ def build_func_table_from_quads(quads):
         table[name] = {'params': params, 'entry': start}
 
     if 'main' not in table:
-        # First function must be main
         first_start = boundaries[0]
         for name, info in table.items():
             if info['entry'] == first_start:
                 table['main'] = info
                 del table[name]
                 break
+        if 'main' not in table:
+            table['main'] = {'params': [], 'entry': boundaries[0]}
 
     return table
 
@@ -266,7 +284,7 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
 
             elif op == 'J':
                 target_rel = int(res)
-                blk.append(f'  br label %{block_of[target_rel]}')
+                blk.append(f'  br label %{block_of.get(target_rel, block_of[0])}')
 
             elif op.startswith('J') and len(op) > 1:
                 rop = op[1:]
@@ -275,14 +293,15 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
                 ll_c = {'<': 'slt', '>': 'sgt', '<=': 'sle', '>=': 'sge', '==': 'eq', '!=': 'ne'}[rop]
                 target_rel = int(res)
                 next_qi = qi + 1
-                next_name = block_of[next_qi] if next_qi in block_of else block_of[0]
-                target_name = block_of[target_rel]
-                if target_rel in leaders:
+                next_name = block_of.get(next_qi, block_of.get(0, 'block0'))
+                target_name = block_of.get(target_rel)
+                if target_name is None:
+                    target_name = block_of.get(0, next_name)
+                elif target_rel in leaders:
                     ti = leaders.index(target_rel)
                     tbe = leaders[ti + 1] if ti + 1 < len(leaders) else len(quads)
                     if tbe - target_rel == 1 and quads[target_rel][0] == 'J':
                         resolved_target = int(quads[target_rel][3])
-                        # Follow J chain to non-J block
                         visited = {target_rel}
                         while resolved_target in leaders:
                             ri = leaders.index(resolved_target)
@@ -293,7 +312,7 @@ def generate_llvm_for_function(quads, func_name, params, inputs, global_input_si
                                 break
                             visited.add(resolved_target)
                             resolved_target = int(quads[resolved_target][3])
-                        target_name = block_of[resolved_target]
+                        target_name = block_of.get(resolved_target, target_name)
                 blk.append(f'  %brc_{qi} = icmp {ll_c} i32 {v1}, {v2}')
                 blk.append(f'  br i1 %brc_{qi}, label %{target_name}, label %{next_name}')
 
@@ -364,8 +383,10 @@ def generate_llvm(quads, func_table, inputs=None):
     func_ranges = {}
     for idx in range(len(entries)):
         name, start = entries[idx]
+        if idx == 0:
+            start = 0  # include global inits before first function
         if idx + 1 < len(entries):
-            end = entries[idx + 1][1]
+            end = max(entries[idx + 1][1], start)
         else:
             end = len(quads)
         fquads = []
@@ -425,10 +446,14 @@ class QuadInterpreter:
         if entry is None:
             return -1, f"Error: 函数 '{func_name}' 只有声明没有定义"
         params = info['params']
+        nparams = len(params)
         for i, pname in enumerate(params):
             if i < len(self.param_stack):
-                self.mem[pname] = self.param_stack[-(len(params) - i)]
-        self.param_stack = self.param_stack[:-len(params)] if len(params) > 0 else self.param_stack
+                self.mem[pname] = self.param_stack[-(nparams - i)] if (nparams - i) <= len(self.param_stack) else 0
+        if len(self.param_stack) >= nparams:
+            self.param_stack = self.param_stack[:-nparams]
+        else:
+            self.param_stack = []
         return entry, None
 
     def _execute_quad(self, op, a1, a2, res):
@@ -732,16 +757,24 @@ def process_42(source_code, inputs=None):
 
     # Strip === markers from test file annotations
     clean_lines = []
-    skip_until_src = False
+    parsed_inputs = inputs
+    import re as _re
     for line in source_code.split('\n'):
         s = line.strip()
-        if s.startswith('==='):
-            skip_until_src = False
+        if s.startswith('=== 输入:'):
+            if inputs is None:
+                parts = s.replace('=== 输入:', '').replace('===', '').strip()
+                if parts and parts != '(无)':
+                    nums = _re.findall(r'-?\d+', parts)
+                    if nums:
+                        parsed_inputs = [int(n) for n in nums]
+            continue
+        elif s.startswith('==='):
             continue
         clean_lines.append(line)
     clean_code = '\n'.join(clean_lines)
 
-    result_32 = run_32(clean_code, inputs)
+    result_32 = run_32(clean_code, parsed_inputs)
     if 'error' in result_32:
         return {'error': result_32['error']}
 
@@ -756,7 +789,7 @@ def process_42(source_code, inputs=None):
             ft_parts.append(f'{name}={info["entry"]},{params_str}' if params_str else f'{name}={info["entry"]}')
     func_table_text = '; '.join(ft_parts)
 
-    res = process_42_from_quads(quad_text, inputs, func_table_text)
+    res = process_42_from_quads(quad_text, parsed_inputs if parsed_inputs is not None else inputs, func_table_text)
     if 'error' in res:
         return res
     res['tokens'] = result_32['tokens']

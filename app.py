@@ -99,7 +99,8 @@ def run_32():
     inputs = []
     if inputs_str.strip():
         try:
-            inputs = [int(x.strip()) for x in inputs_str.split(',') if x.strip()]
+            s = inputs_str.strip().replace(',', ' ')
+            inputs = [int(x) for x in s.split() if x]
         except ValueError:
             pass
     res = process_32(code, inputs)
@@ -111,17 +112,36 @@ def run_42():
     code = request.form.get('code', '')
     inputs_str = request.form.get('inputs', '')
     func_table_text = request.form.get('func_table', '')
+    
+    # Strip === 函数表: prefix if present
+    if func_table_text.startswith('=== 函数表:'):
+        func_table_text = func_table_text.replace('=== 函数表:', '').replace('===', '').strip()
+    
     inputs = []
     if inputs_str.strip():
         try:
-            inputs = [int(x.strip()) for x in inputs_str.split(',') if x.strip()]
+            s = inputs_str.strip().replace(',', ' ')
+            inputs = [int(x) for x in s.split() if x]
         except ValueError:
             pass
-    if '(' in code:
-        res = process_42_from_quads(code, inputs, func_table_text if func_table_text else None)
+    
+    # Extract func_table from === markers in code if not already provided
+    clean_lines = []
+    for line in code.split('\n'):
+        s = line.strip()
+        if s.startswith('=== 函数表:') and not func_table_text:
+            func_table_text = s.replace('=== 函数表:', '').replace('===', '').strip()
+        elif s.startswith('==='):
+            continue
+        else:
+            clean_lines.append(line)
+    clean_code = '\n'.join(clean_lines)
+
+    if '(' in clean_code:
+        res = process_42_from_quads(clean_code, inputs, func_table_text if func_table_text else None)
     else:
         from task42 import process_42 as p42
-        res = p42(code, inputs)
+        res = p42(clean_code, inputs)
     return jsonify(res)
 
 
