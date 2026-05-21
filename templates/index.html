@@ -1,13 +1,16 @@
 <!DOCTYPE html>
+<!-- 编译原理课程设计 Web界面：支持任务3.2（中间代码生成）和任务4.2（四元式→LLVM IR） -->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>编译原理课程设计 - 任务3.2 &amp; 4.2</title>
+    <!-- 全局样式定义：深色主题，使用CSS Grid布局 -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
         h1 { text-align: center; padding: 14px 0; background: #16213e; color: #00d4ff; font-size: 20px; letter-spacing: 2px; }
         .container { max-width: 1700px; margin: 0 auto; padding: 12px; }
+        /* 主布局：左侧侧边栏（280px）+ 右侧主面板 */
         .layout { display: grid; grid-template-columns: 280px 1fr; gap: 12px; min-height: calc(100vh - 60px); }
         .sidebar { background: #16213e; border-radius: 10px; padding: 12px; overflow-y: auto; max-height: calc(100vh - 80px); }
         .sidebar h3 { color: #00d4ff; font-size: 14px; margin-bottom: 8px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
@@ -16,6 +19,7 @@
         .sidebar .test-list li:hover { background: #2a2a4a; color: #fff; }
         .sidebar .test-list li.active { background: #00d4ff22; color: #00d4ff; border-left: 2px solid #00d4ff; }
         .main-panel { display: flex; flex-direction: column; gap: 12px; }
+        /* 输入区域：代码编辑器和输入参数 */
         .input-area { background: #16213e; border-radius: 10px; padding: 12px; }
         .input-area label { display: block; font-weight: bold; margin-bottom: 4px; color: #00d4ff; font-size: 13px; }
         .input-area textarea { width: 100%; height: 200px; background: #0f0f23; color: #f0f0f0; border: 1px solid #2a2a4a; border-radius: 6px; padding: 10px; font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; resize: vertical; }
@@ -23,49 +27,60 @@
         .input-row .field { display: flex; flex-direction: column; }
         .input-row .field label { font-size: 11px; color: #888; margin-bottom: 2px; }
         .input-row .field input { background: #0f0f23; color: #f0f0f0; border: 1px solid #2a2a4a; border-radius: 4px; padding: 5px 8px; font-size: 12px; width: 260px; }
+        /* 按钮样式：运行按钮使用渐变色区分 */
         button { background: linear-gradient(135deg, #00d4ff, #0088cc); color: #000; border: none; padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: bold; cursor: pointer; margin-right: 6px; transition: .2s; }
         button:hover { opacity: 0.9; }
-        button.run32 { background: linear-gradient(135deg, #ff9a56, #ff6b35); }
-        button.run42 { background: linear-gradient(135deg, #56d4ff, #356bff); }
+        button.run32 { background: linear-gradient(135deg, #ff9a56, #ff6b35); }   /* 3.2任务：橙色 */
+        button.run42 { background: linear-gradient(135deg, #56d4ff, #356bff); }   /* 4.2任务：蓝色 */
+        /* 结果卡片：展示各个编译阶段的输出 */
         .card { background: #16213e; border-radius: 10px; padding: 12px; max-height: 500px; overflow-y: auto; }
         .card h2 { color: #00d4ff; font-size: 15px; margin-bottom: 8px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
         pre { background: #0f0f23; color: #c0c0d0; padding: 8px; border-radius: 6px; overflow-x: auto; font-size: 11px; line-height: 1.4; max-height: 350px; white-space: pre-wrap; word-break: break-all; border: 1px solid #2a2a4a; }
-        .match-ok { color: #35ff6b; font-weight: bold; font-size: 16px; }
-        .match-fail { color: #ff3535; font-weight: bold; font-size: 16px; }
+        .match-ok { color: #35ff6b; font-weight: bold; font-size: 16px; }      /* 对比一致：绿色 */
+        .match-fail { color: #ff3535; font-weight: bold; font-size: 16px; }    /* 对比不一致：红色 */
         .error { color: #ff3535; background: #2a0000; padding: 8px; border-radius: 4px; font-size: 12px; }
+        /* 标签页切换样式 */
         .tab-buttons { display: flex; gap: 3px; margin-bottom: 8px; flex-wrap: wrap; }
         .tab-btn { background: #2a2a4a; color: #aaa; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
         .tab-btn.active { background: #00d4ff; color: #000; font-weight: bold; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content { display: none; }        /* 隐藏非活跃标签页 */
+        .tab-content.active { display: block; } /* 显示活跃标签页 */
         .output-badge { display: inline-block; background: #0f0f23; color: #35ff6b; padding: 2px 8px; border-radius: 3px; font-weight: bold; font-size: 12px; }
+        /* 对比表格 */
         .compare-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
         .compare-table td { padding: 6px; border: 1px solid #2a2a4a; }
         .compare-table tr:first-child { background: #0f0f23; }
+        /* 响应式布局：小屏幕时侧边栏和主面板上下排列 */
         @media (max-width: 1200px) { .layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+<!-- 页面标题 -->
 <h1>编译原理课程设计 — 任务 3.2 中间代码 &amp; 4.2 四元式→LLVM</h1>
 
 <div class="container">
     <div class="layout">
+        <!-- 左侧侧边栏：测试用例列表 -->
         <div class="sidebar">
             <h3>📂 3.2 测试用例 (源码)</h3>
             <ul class="test-list" id="test32List">
+                <!-- Jinja2模板引擎循环：渲染3.2测试用例列表 -->
                 {% for t in tests32 %}
                 <li data-name="{{ t.name }}" data-code="{{ t.content | e }}" data-task="32" onclick="loadTest(this)">{{ t.name }}</li>
                 {% endfor %}
             </ul>
             <h3 style="margin-top: 16px;">📂 4.2 测试用例 (四元式)</h3>
             <ul class="test-list" id="test42List">
+                <!-- Jinja2模板引擎循环：渲染4.2测试用例列表 -->
                 {% for t in tests42 %}
                 <li data-name="{{ t.name }}" data-code="{{ t.content | e }}" data-task="42" onclick="loadTest(this)">{{ t.name }}</li>
                 {% endfor %}
             </ul>
         </div>
 
+        <!-- 右侧主面板：输入区域 + 结果展示 -->
         <div class="main-panel">
+            <!-- 代码输入区域 -->
             <div class="input-area">
                 <label id="inputLabel">源代码 / 四元式</label>
                 <textarea id="code" placeholder="输入源代码或四元式..."></textarea>
@@ -79,29 +94,37 @@
                 </div>
             </div>
 
+            <!-- LLVM工具链状态提示 -->
             <div id="llvmStatus" style="font-size:11px;color:#888;margin-top:-8px;">检测 LLVM 工具链中...</div>
+            <!-- 结果展示区域（动态渲染） -->
             <div id="results"></div>
         </div>
     </div>
 </div>
 
 <script>
-var currentTask = '32';
-var currentFuncTable = '';
+// 全局状态变量
+var currentTask = '32';           // 当前选中的任务类型（'32'或'42'）
+var currentFuncTable = '';        // 当前测试用例的函数表信息
 
+// ========== loadTest函数：从侧边栏加载测试用例 ==========
+// 将测试用例的代码和元数据填充到输入区域
 function loadTest(el) {
-    currentTask = el.dataset.task;
+    currentTask = el.dataset.task;  // 设置当前任务类型
     var listId = currentTask === '42' ? '#test42List' : '#test32List';
+    // 更新侧边栏高亮
     document.querySelectorAll(listId + ' li').forEach(function(l) { l.classList.remove('active'); });
     el.classList.add('active');
 
+    // HTML实体解码（服务端转义的内容需要还原）
     var code = el.dataset.code.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"');
     var lines = code.split('\n');
-    var outLines = [];
-    var inputs = '';
-    var section = 'title';
+    var outLines = [];        // 过滤后显示在编辑器中的行
+    var inputs = '';          // === 输入: 区域提取的数据
+    var section = 'title';    // 文件解析状态机：title/input/func/quads/src/skip
     currentFuncTable = '';
 
+    // 状态机解析测试文件
     for (var i = 0; i < lines.length; i++) {
         var s = lines[i].trim();
         if (s.startsWith('=== 输入:')) {
@@ -112,7 +135,7 @@ function loadTest(el) {
             section = 'func';
             currentFuncTable = s.replace('=== 函数表:', '').replace(/===/g, '').trim();
         } else if (s.startsWith('=== 预期')) {
-            section = 'skip';
+            section = 'skip';                    // 预期结果区域跳过
         } else if (s.startsWith('===') && section === 'title') {
             // Title line - switch to content mode
             section = currentTask === '42' ? 'quads' : 'src';
@@ -120,36 +143,42 @@ function loadTest(el) {
             section = 'skip';
         } else if (section === 'quads' || section === 'src' || section === 'title') {
             if (section === 'title') section = currentTask === '42' ? 'quads' : 'src';
-            outLines.push(lines[i]);
+            outLines.push(lines[i]);             // 收集有效代码行
         } else if (section === 'func') {
-            currentFuncTable += ' ' + s;
+            currentFuncTable += ' ' + s;          // 追加函数表行
         }
     }
 
+    // 填充到输入区域
     document.getElementById('code').value = outLines.join('\n');
     document.getElementById('inputs').value = inputs;
     document.getElementById('inputLabel').textContent = currentTask === '42' ? '四元式 (Quadruples)' : '源代码 (Source Code)';
 }
 
+// ========== runTask函数：运行任务 ==========
+// 向服务器发送POST请求，执行编译/解释流程
 function runTask(task) {
     var code = document.getElementById('code').value;
     var inputs = document.getElementById('inputs').value;
     var container = document.getElementById('results');
 
+    // 构造POST请求体
     var body = new URLSearchParams({code: code, inputs: inputs});
     if (task === '42' && currentFuncTable) {
-        body.append('func_table', currentFuncTable);
+        body.append('func_table', currentFuncTable);  // 4.2任务需要函数表
     }
     var url = task === '32' ? '/run32' : '/run42';
 
     container.innerHTML = '<div style="text-align:center;padding:30px;color:#888;">⏳ 运行中...</div>';
 
+    // 发送AJAX请求
     fetch(url, {method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: body})
         .then(function(r) { return r.json(); })
         .then(function(data) { renderResults(data, task); })
         .catch(function(err) { container.innerHTML = '<div class="error">网络错误: ' + err.message + '</div>'; });
 }
 
+// ========== renderResults函数：渲染后端返回的结果 ==========
 function renderResults(data, task) {
     var container = document.getElementById('results');
     if (data.error) {
@@ -158,14 +187,16 @@ function renderResults(data, task) {
     }
 
     if (task === '32') {
-        container.innerHTML = buildTask32View(data);
-        window._last32 = data;   // cache for 4.2 cross-run
+        container.innerHTML = buildTask32View(data);  // 构建3.2结果视图
+        window._last32 = data;   // cache for 4.2 cross-run，缓存数据供跨任务调用
     } else {
-        container.innerHTML = buildTask42View(data);
+        container.innerHTML = buildTask42View(data);  // 构建4.2结果视图
     }
-    bindTabs();
+    bindTabs();  // 绑定标签页切换事件
 }
 
+// ========== buildTask32View函数：构建任务3.2的结果HTML ==========
+// 展示：解释器输出、标签页（Token序列、AST、符号表、四元式、输出）
 function buildTask32View(d) {
     return '<div class="card">' +
         '<h2>📋 任务 3.2 中间代码</h2>' +
@@ -173,6 +204,7 @@ function buildTask32View(d) {
         '<div style="margin:8px 0;">' +
             '<button class="run42" onclick="run42from32()">▶ 以本四元式运行 4.2</button>' +
         '</div>' +
+        // 标签页按钮
         '<div class="tab-buttons">' +
             '<button class="tab-btn active" data-tab="tokens">Token序列</button>' +
             '<button class="tab-btn" data-tab="ast">AST</button>' +
@@ -180,6 +212,7 @@ function buildTask32View(d) {
             '<button class="tab-btn" data-tab="quads">四元式</button>' +
             '<button class="tab-btn" data-tab="output">输出</button>' +
         '</div>' +
+        // 标签页内容
         '<div class="tab-content active" data-tab="tokens"><pre>' + escapeHtml(d.tokens) + '</pre></div>' +
         '<div class="tab-content" data-tab="ast"><pre>' + escapeHtml(d.ast) + '</pre></div>' +
         '<div class="tab-content" data-tab="sym"><pre>' + escapeHtml(d.symbol_table) + '</pre></div>' +
@@ -188,21 +221,25 @@ function buildTask32View(d) {
     '</div>';
 }
 
+// ========== run42from32函数：从3.2结果生成四元式后直接运行4.2 ==========
+// 复用3.2的四元式和函数表信息，避免重复编译
 function run42from32() {
     if (!window._last32) return;
     var d = window._last32;
     var inputs = document.getElementById('inputs').value;
-    var quads = d.quadruples;
+    var quads = d.quadruples;          // 3.2生成的四元式
     var funcTable = d.func_table_info || '';
 
     var container = document.getElementById('results');
     // Remove any previous 4.2 result appended by this button
+    // 移除之前通过此按钮生成的4.2结果
     var old42 = document.getElementById('result42from32');
     if (old42) old42.remove();
     var oldLoading = document.getElementById('loading42from32');
     if (oldLoading) oldLoading.remove();
 
     // Insert loading below current content
+    // 在当前内容下方插入加载提示
     var loading = document.createElement('div');
     loading.id = 'loading42from32';
     loading.style.cssText = 'text-align:center;padding:20px;color:#888;';
@@ -220,7 +257,7 @@ function run42from32() {
                 wrapper.innerHTML = '<div class="card"><div class="error"><b>错误:</b> ' + escapeHtml(data.error) + '</div></div>';
             } else {
                 wrapper.innerHTML = buildTask42View(data);
-                bindTabsIn(wrapper);
+                bindTabsIn(wrapper);  // 绑定结果内部的标签页切换
             }
             container.appendChild(wrapper);
         })
@@ -233,6 +270,7 @@ function run42from32() {
         });
 }
 
+// ========== bindTabsIn函数：在指定父元素内绑定标签页切换 ==========
 function bindTabsIn(parent) {
     parent.querySelectorAll('.tab-btn').forEach(function(btn) {
         btn.onclick = function() {
@@ -247,13 +285,15 @@ function bindTabsIn(parent) {
     });
 }
 
+// ========== buildTask42View函数：构建任务4.2的结果HTML ==========
+// 展示：解释器与LLVM对比表格、LLVM IR代码、LLVM编译输出
 function buildTask42View(d) {
     var match = d.match;
     var matchClass = match ? 'match-ok' : 'match-fail';
     var matchText = match ? '✅ 一致' : '❌ 不一致';
 
     return '<div>' +
-        // Comparison table
+        // Comparison table：解释器 vs LLVM 对比表
         '<div class="card" style="margin-bottom:10px;">' +
             '<h2>⚡ 任务 4.2 四元式 → LLVM 对比结果</h2>' +
             '<table class="compare-table">' +
@@ -264,7 +304,7 @@ function buildTask42View(d) {
             '</table>' +
             '<p class="' + matchClass + '" style="margin:10px 0 0 0;">' + matchText + '</p>' +
         '</div>' +
-        // LLVM IR and output
+        // LLVM IR and output：标签页（LLVM IR + LLVM编译输出）
         '<div class="card">' +
             '<div class="tab-buttons">' +
                 '<button class="tab-btn active" data-tab="llvm">LLVM IR</button>' +
@@ -276,6 +316,7 @@ function buildTask42View(d) {
     '</div>';
 }
 
+// ========== bindTabs函数：绑定页面中所有标签页切换事件 ==========
 function bindTabs() {
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
         btn.onclick = function() {
@@ -290,17 +331,21 @@ function bindTabs() {
     });
 }
 
+// ========== escapeHtml函数：HTML转义（防XSS） ==========
 function escapeHtml(str) {
     if (!str) return '';
     return (str+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
+// 页面加载完成后自动加载第一个测试用例并检测LLVM
 window.addEventListener('DOMContentLoaded', function() {
     var first32 = document.querySelector('#test32List li');
-    if (first32) first32.click();
-    checkLLVM();
+    if (first32) first32.click();  // 自动加载第一个3.2测试用例
+    checkLLVM();                    // 检测LLVM工具链状态
 });
 
+// ========== checkLLVM函数：检测LLVM工具链状态 ==========
+// 向后端发送请求查询clang/lli的安装情况
 function checkLLVM() {
     fetch('/llvm_status')
         .then(function(r) { return r.json(); })
